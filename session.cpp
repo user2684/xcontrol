@@ -32,7 +32,7 @@ session_t::session_t(void) : a_out(0), a_in(0), a_data(0)
     debug_out(debug, "session: creating MFD pages");
     a_mfdpages = new mfdpages_t(a_out,a_in,a_data,a_fms);
     a_mfdpages->load(); // create default pages
-	a_gui = new gui_t(a_mfdpages,a_fms);
+    a_gui = new gui_t(a_mfdpages,a_fms,a_out);
 }
 
 session_t::~session_t(void)
@@ -50,7 +50,7 @@ session_t::~session_t(void)
 int session_t::enable(void)
 {
     a_data->connect(0.5f);
-    a_gui->enable(true);
+    a_gui->enable();
     return 1;
 }
 

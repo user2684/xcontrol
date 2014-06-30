@@ -3,7 +3,7 @@ TEMPLATE = lib
 QT -= gui core
 
 CONFIG += plugin release
-CONFIG -= thread exceptions qt rtti debug
+CONFIG -= thread exceptions qt rtti
 
 VERSION = 1.0.0
 
@@ -13,7 +13,7 @@ DEFINES += XPLM200
 
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0
-    LIBS += -L../../../xcontrol/lib/win/32 -lXPLM -lXPWidgets -lusb
+    LIBS += -L../../../xcontrol/lib/win/32 -lXPLM -lXPWidgets -lusb0
     TARGET = win.xpl
 }
 
@@ -32,14 +32,13 @@ macx {
 }
 
 HEADERS		+= include/*.h
-HEADERS		+= *.h
 
-SOURCES		+= main.cpp \
-    out_saitek.cpp
+SOURCES		+= main.cpp
 SOURCES		+= session.cpp
 SOURCES		+= tools.cpp
 SOURCES		+= data.cpp
 SOURCES		+= out.cpp
+SOURCES		+= out_saitek.cpp
 SOURCES		+= in.cpp
 SOURCES		+= mfdpage.cpp
 SOURCES             += mfdpage_fms.cpp

@@ -40,14 +40,18 @@ static config_t* a_config_ref;
 static mfdpages_t* a_mfdpages_ref;
 static fms_utils_t* a_fms_utils_ref;
 static XPLMHotKeyID fms_status_hotkey = NULL;
+static out_t* a_out_ref;
+static XPWidgetID mfd_widget;
+static XPWidgetID mfd_window;
 
 gui_t::gui_t(void)
 {
 }
 
-gui_t::gui_t(mfdpages_t* mfdpages,fms_t* fms_ref){
+gui_t::gui_t(mfdpages_t* mfdpages,fms_t* fms_ref,out_t* out_ref){
 	a_fms_ref = fms_ref;
 	a_mfdpages_ref = mfdpages;
+    a_out_ref = out_ref;
 	a_config_ref = config_t::getInstance();
 	a_menu_created = 0;
 }
@@ -57,19 +61,18 @@ gui_t::~gui_t(void) {
 }
 
 // enagle the UI
-void gui_t::enable(int a_joy) {
+void gui_t::enable(void) {
 	// Create a Custom Menu within the Plugin Menu
-	if (a_menu_created == 0) mySubMenuItem = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "Saitek  Control Enhanced", 0, 1);						
-	myMenu = XPLMCreateMenu("Saitek  Control Enhanced", XPLMFindPluginsMenu(), mySubMenuItem, menu_handler, 0);	
-	if (a_joy) 	{ // if the joystick is attached, create the submenus
-		a_fms_status_page = 0;
-		a_fms_utils_ref = new fms_utils_t();
-		XPLMAppendMenuItem(myMenu,"FMS Settings",(void*)1,1);
-		XPLMAppendMenuItem(myMenu,"Show FMS Satus",(void*)2,1);
-		XPLMAppendMenuSeparator(myMenu);
-		XPLMAppendMenuItem(myMenu,"Reset the plugin",(void*)3,1);
-		fms_status_hotkey = XPLMRegisterHotKey(XPLM_VK_B, xplm_DownFlag + xplm_ShiftFlag + xplm_ControlFlag,"Show control FMS Status",fms_status_hotkey_handler,NULL);
-	} else  XPLMAppendMenuItem(myMenu,"No Joystick found",(void*)99,1);
+    if (a_menu_created == 0) mySubMenuItem = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "X Control", 0, 1);
+    myMenu = XPLMCreateMenu("X Control", XPLMFindPluginsMenu(), mySubMenuItem, menu_handler, 0);
+    a_fms_status_page = 0;
+    a_fms_utils_ref = new fms_utils_t();
+    XPLMAppendMenuItem(myMenu,"FMS Settings",(void*)1,1);
+    XPLMAppendMenuItem(myMenu,"Show FMS Satus",(void*)2,1);
+    XPLMAppendMenuItem(myMenu,"Show MFS",(void*)3,1);
+    XPLMAppendMenuSeparator(myMenu);
+    XPLMAppendMenuItem(myMenu,"Reset the plugin",(void*)4,1);
+    fms_status_hotkey = XPLMRegisterHotKey(XPLM_VK_B, xplm_DownFlag + xplm_ShiftFlag + xplm_ControlFlag,"Show control FMS Status",fms_status_hotkey_handler,NULL);
 	a_menu_created = 1;
 }
 
@@ -86,7 +89,9 @@ void gui_t::menu_handler(void *inMenuRef, void *inItemRef) {
 		fms_option_window_handler();
 	} 	else if(menuItem == 2) { // Show FMS status
 		fms_status_window_handler();
-	} 	else if(menuItem == 3) { // reset the plugin
+    } 	else if(menuItem == 3) { // Show the MFD
+        mfd_window_handler();
+    } else if(menuItem == 4) { // reset the plugin
 		a_fms_ref->reset(); // reset the FMS
 		a_mfdpages_ref->load(); // create the MFD pages
 	} 	
@@ -422,4 +427,46 @@ int gui_t::fms_status_handler(XPWidgetMessage inMessage,XPWidgetID inWidget,long
 	}
 	return 0;
 }
+
+// handle the creation of the MFD window
+void	gui_t::mfd_window_handler(void) {
+        if (XPIsWidgetVisible(mfd_widget)) XPHideWidget(mfd_widget);
+        else {
+            mfd_create_window(300, 600, 300, 350);
+            XPShowWidget(mfd_widget);
+        }
+}
         
+// build the MFD window
+void gui_t::mfd_create_window(int x, int y, int w, int h){
+    int x2 = x + w;
+    int y2 = y - h;
+    int Item =0;
+    char temp[2048] = {};
+    memset(temp, 0, 2048);
+    // retrieve default FL and GS
+    char buffer_fl[512],buffer_gs[512],buffer_takeoff[512];
+    map<string,string> config=a_config_ref->get_config_fms();
+    sprintf(buffer_fl, "%i",::atoi(config["cruise_fl"].c_str()));
+    sprintf(buffer_gs, "%i",::atoi(config["cruise_gs"].c_str()));
+    sprintf(buffer_takeoff, "%s",config["scheduled_takeoff"].c_str());
+    // build the MFD window
+    mfd_widget = XPCreateWidget(x, y, x2, y2,1,"Virtual MFD",1,NULL,xpWidgetClass_MainWindow);
+    XPSetWidgetProperty(mfd_widget, xpProperty_MainWindowHasCloseBoxes, 1);
+    mfd_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,mfd_widget,xpWidgetClass_SubWindow);
+    XPSetWidgetProperty(mfd_window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
+    // build the labels and the text box widgets
+    snprintf(temp, 2048,a_out_ref->a_joystick->get_text().c_str());
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,temp,0,fms_option_widget,xpWidgetClass_Caption);
+    // Add the callback
+    XPAddWidgetCallback(mfd_widget, mfd_handler);
+}
+
+// handle events from the MFD panel
+int gui_t::mfd_handler(XPWidgetMessage inMessage,XPWidgetID inWidget,long inParam1,long inParam2) {
+    if (inMessage == xpMessage_CloseButtonPushed){
+            if(XPIsWidgetVisible(mfd_widget)) XPHideWidget(mfd_widget);
+            return 1;
+    }
+    return 0;
+}

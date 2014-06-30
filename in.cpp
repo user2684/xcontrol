@@ -30,7 +30,7 @@ void in_t::delete_all_pages(void)
 	if (! a_pages.empty()) {
 		for (set<mfdpage_t*>::iterator it = a_pages.begin(); it != a_pages.end(); ++it) delete *it;
 		a_pages.clear();
-		debug_out(debug, "in: deleted joystick input handler (self: %p)", this);
+        debug_out(debug, "in: deleted input handler (self: %p)", this);
 	}
 }
 

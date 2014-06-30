@@ -3,14 +3,22 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include "include/libusb/lusb0_usb.h"
+
 #include "include/out_saitek.h"
+
+#if IBM
+#include "include/libusb/lusb0_usb.h"
+#else
+#include "include/libusb-1.0/libusb.h"
+#endif
 
 extern const char* version;
 
+// define the messages to display when the plugin load/unload
 #define OFFLINE_MSG  "   Saitek X52\n     Flight\n Control System"
 #define ONLINE_MSG   "   xcontrol  \n \n ver %s", version
 
+// Define supported joystick IDs
 enum saitek_vendors
 {
     saitek_vendor  = 0x06A3
@@ -29,15 +37,17 @@ out_saitek_t::out_saitek_t(void)
 {
 }
 
+// Init the library
 void out_saitek_t::init(void)
 {
     debug_out(debug, "out_saitek: searching for a supported Saitek joystick");
     bool found = search();
-    if (found) {
+    if (found) { // if a joystick was found, attach to it
        a_attached = attach();
     }
 }
 
+// Unload the library
 void out_saitek_t::deinit(void)
 {
    if (a_attached) detach();
@@ -45,6 +55,7 @@ void out_saitek_t::deinit(void)
    a_attached = false;
 }
 
+// search for a supported joystick
 bool out_saitek_t::search(void)
 {
     int supported_devices [4] = { x52_standard_device1, x52_standard_device2, x52_pro_device, x52_other_device};
@@ -58,7 +69,7 @@ bool out_saitek_t::search(void)
     int busses = usb_find_busses();
     int devices = usb_find_devices();
     debug_out(debug, "out_saitek: enumerated %d busses and %d devices",busses,devices);
-
+    // cycle through all the devices looking for a supported joystick
     for (bus = usb_busses; bus; bus = bus->next)
     {
         for (dev = bus->devices; dev; dev = dev->next)
@@ -82,9 +93,10 @@ bool out_saitek_t::search(void)
         debug_out(err, "out_saitek: cannot find any supported device");
         return false;
     }
-    return true;
+    return true; // joystick found
 }
 
+// Attach to the device and initialize it
 bool out_saitek_t::attach(void)
 {
     a_usbhdl = usb_open(a_joydev);
@@ -100,9 +112,9 @@ bool out_saitek_t::attach(void)
     return true;
 }
 
+// Detach from the device
 bool out_saitek_t::detach(void)
 {
-
     debug_out(info, "out_saitek: detaching joystick connection");
     print(OFFLINE_MSG);
     set_time(true, 0, 0);
@@ -115,23 +127,26 @@ bool out_saitek_t::detach(void)
     return true;
 }
 
+// Set the display brightness
 void out_saitek_t::set_display_brightness(char brightness) {
     if (!a_attached) return;
     int res = 0;
-    bool mfd = true;
-    res = usb_control_msg(a_usbhdl, USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_OUT, 0x91,brightness, mfd?0xB1:0xB2, 0, 0, 100);
+    bool mfd = true; // Turn the lights on for the MFD
+    res = send_usb(mfd?0xB1:0xB2,brightness);
     if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on display: %d",brightness,res);
 }
 
+// Set the led brightness
 void out_saitek_t::set_led_brightness(char brightness)
 {
     if (!a_attached) return;
     int res = 0;
-    bool mfd = false;
-    res = usb_control_msg(a_usbhdl, USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_OUT, 0x91,brightness, mfd?0xB1:0xB2, 0, 0, 100);
+    bool mfd = false; // Do not turn the lights on for the MFD
+    res = send_usb(mfd?0xB1:0xB2,brightness);
     if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on LEDs: %d",brightness,res);
 }
 
+// Set the text for the MFD and buffer it
 void out_saitek_t::set_textdata(const char* text)
 {
     if (!a_attached) return;
@@ -139,17 +154,51 @@ void out_saitek_t::set_textdata(const char* text)
     a_textdata.assign(text);
 }
 
+// return the MFD text
 string out_saitek_t::get_text(void)
 {
     return a_textdata;
 }
 
+// print on the MFD the text that has been set
 void out_saitek_t::print()
 {
     if (!a_attached) return;
     print(a_textdata.c_str());
 }
 
+// Turn on a led
+void out_saitek_t::set_led(int led, int on)
+{
+    if (!a_attached) return;
+    int res = send_usb(0xB8,on | (led<<8));
+    if (res < 0) debug_out(err,"out_saitek: cannot set let %d on %d: %d",led,on,res);
+}
+
+// Set the time on the MFD
+void out_saitek_t::set_time(bool h24, int hour, int minute)
+{
+    if (!a_attached) return;
+    unsigned short timedata = minute | (hour<<8) | (h24?0x8000:0);
+    int res = send_usb(0xC0,timedata);
+    if (res < 0) debug_out(err,"out_saitek: cannot set time to %c:%c: %d",hour,minute,res);
+}
+
+// Set the date on the MFD
+void out_saitek_t::set_date(int year, int month, int day)
+{
+    if (!a_attached) return;
+    int res;
+    if (product == x52_other_device) return;
+    unsigned short datedata = day | (month<<8);
+    unsigned short yeardata = year;
+    res = send_usb(0xC4,datedata);
+    if (res < 0) debug_out(err,"out_saitek: cannot set day to %d and month to %d: %d",day,month,res);
+    res = send_usb(0xC8,yeardata);
+    if (res < 0) debug_out(err,"out_saitek: cannot set your to %d: %d",year,res);
+}
+
+// print on the MFD the given text
 void out_saitek_t::print(const char* t, ...)
 {
     int n_lf = 0;
@@ -183,6 +232,7 @@ void out_saitek_t::print(const char* t, ...)
     }
 }
 
+// Print the given text on the given line
 void out_saitek_t::print_line(int line, const char *text, int length)
 {
     int res;
@@ -202,6 +252,7 @@ void out_saitek_t::print_line(int line, const char *text, int length)
     }
 }
 
+// clear a given line
 void out_saitek_t::clear_line(int line)
 {
     unsigned char line_clearctl[3] = {0xD9, 0xDA, 0xDC};
@@ -209,37 +260,16 @@ void out_saitek_t::clear_line(int line)
     if (res < 0) debug_out(err,"out_saitek: cannot clear line %d: %d",line,res);
 }
 
-
-void out_saitek_t::set_led(int led, int on)
-{
-    int res = send_usb(0xB8,on | (led<<8));
-    if (res < 0) debug_out(err,"out_saitek: cannot set let %d on %d: %d",led,on,res);
-}
-
-void out_saitek_t::set_time(bool h24, int hour, int minute)
-{
-    unsigned short timedata = minute | (hour<<8) | (h24?0x8000:0);
-    int res = send_usb(0xC0,timedata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set time to %c:%c: %d",hour,minute,res);
-}
-
-void out_saitek_t::set_date(int year, int month, int day)
-{
-    int res;
-    if (product == x52_other_device) return;
-    unsigned short datedata = day | (month<<8);
-    unsigned short yeardata = year;
-    res = send_usb(0xC4,datedata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set day to %d and month to %d: %d",day,month,res);
-    res = send_usb(0xC8,yeardata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set your to %d: %d",year,res);
-}
-
+// Send a message to the USB device
 int out_saitek_t::send_usb(int index, int value)
 {
+    // requesttype: instruct for outboud connection
+    // request: Saitek only uses endpoint 0x91
+    // message: Saitek uses index and value to communicate with the joystick
     int requesttype = USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_OUT;
     int request = 0x91;
     int timeout = 100;
+    debug_out(verbose,"out_saitek: sending to usb requesttype: %d,request: %d,index: %d,value: %d",requesttype,request,index,value);
     return usb_control_msg(a_usbhdl,requesttype,request,value,index,0,0,timeout);
 
 }

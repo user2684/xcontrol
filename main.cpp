@@ -44,11 +44,11 @@ static session_t* session = 0;
 
 PLUGIN_API int XPluginStart(char* name, char* signature, char* description)
 {
-    strcpy(name, "control (");
+    strcpy(name, "xcontrol (");
     strcat(name, version);
     strcat(name, ")");
     strcpy(signature, "copai.equipment.control");
-    strcpy(description, "provides additional features for the Saitek  products, compiled on ");
+    strcpy(description, "provides enhanced features covering Saitek  products, compiled on ");
     strcat(description, __DATE__);
     try
     {
@@ -67,7 +67,7 @@ PLUGIN_API int XPluginStart(char* name, char* signature, char* description)
 PLUGIN_API int XPluginEnable(void)
 {
     if (!session) return 0;
-    session->enable();
+    return session->enable();
     return 0;
 }
 

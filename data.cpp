@@ -77,7 +77,7 @@ void data_t::remove_datasource(object_t* source)
     if (!source) return;
     if (a_datasources.erase(source))
     {
-        debug_out(debug, "data: removed datasource '%s' (self: %p)", source->name().c_str(), source);
+        debug_out(verbose, "data: removed datasource '%s' (self: %p)", source->name().c_str(), source);
         delete source;
     }
 }
@@ -158,7 +158,7 @@ datasource_t::datasource_t(const char* ref) : a_name(ref), a_newdata(true)
 
 datasource_t::~datasource_t(void)
 {
-    debug_out(debug, "data: deleted data source '%s' (self: %p)", a_name.c_str(), this);
+    debug_out(verbose, "data: deleted data source '%s' (self: %p)", a_name.c_str(), this);
 }
 
 const std::string& datasource_t::name(void)
