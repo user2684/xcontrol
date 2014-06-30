@@ -24,7 +24,7 @@ void tools_t::debug_out(int type, const char* msg, ...)
 	if ((type == debug) && (a_debug <1)) return;
 	if ((type == verbose) && (a_debug<2)) return;
 	FILE * log;
-	log = fopen ("Resources/plugins/control/log.txt","a");
+    log = fopen ("Resources/plugins/xcontrol/xlog.txt","a");
     va_list ap;
     va_start(ap, msg);
     switch (type)
@@ -58,7 +58,7 @@ void tools_t::debug_out(const char* msg, ...)
     va_list ap;
     va_start(ap, msg);
 	FILE * log;
-	log = fopen ("Resources/plugins/control/log.txt","a");
+    log = fopen ("Resources/plugins/xcontrol/xlog.txt","a");
     fprintf(log, "[control]: ");
     vfprintf(log, msg, ap);
     fprintf(log, "\n");

@@ -2,10 +2,10 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "./include/SDK/XPLMDefs.h"
+#include "include/SDK/XPLMDefs.h"
 #include "include/session.h"
 
-const char* version = "0.6.1b";
+const char* version = "0.7.0a";
 
 #if IBM
 #include <windows.h>
@@ -67,14 +67,14 @@ PLUGIN_API int XPluginStart(char* name, char* signature, char* description)
 PLUGIN_API int XPluginEnable(void)
 {
     if (!session) return 0;
-	if (session->a_joy) return session->enable();
-	else return 0;
+    session->enable();
+    return 0;
 }
 
 PLUGIN_API void XPluginDisable(void)
 {
     if (!session) return;
-    if (session->a_joy) session->disable();
+    session->disable();
     return;
 }
 

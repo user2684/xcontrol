@@ -26,10 +26,10 @@ using std::map;
 using std::string;
 
 // mfdpages
-mfdpages_t::mfdpages_t(out_t* joystickout,in_t* joystickin,data_t* dataconnection,fms_t* fms_ref)
+mfdpages_t::mfdpages_t(out_t* out,in_t* in,data_t* dataconnection,fms_t* fms_ref)
 {
-	a_joystickin = joystickin;
-	a_joystickout = joystickout;
+    a_in = in;
+    a_out = out;
 	a_dataconnection = dataconnection;
 	a_fms_ref = fms_ref;
 }
@@ -37,12 +37,12 @@ mfdpages_t::mfdpages_t(out_t* joystickout,in_t* joystickin,data_t* dataconnectio
 mfdpages_t::~mfdpages_t(void)
 {
     debug_out(debug, "mfdpages: deleting all the mfd pages");
-    a_joystickin->delete_all_pages();
+    a_in->delete_all_pages();
 }
 
 void mfdpages_t::load(void)
 {
-	a_joystickin->delete_all_pages(); // delete all the existing pages
+    a_in->delete_all_pages(); // delete all the existing pages
 	config_t * a_config = config_t::getInstance();
      map<string,string> config=a_config->get_config();
 	 map<string,int> buttons;
@@ -56,28 +56,28 @@ void mfdpages_t::load(void)
 		string pages = config[button_config];
 		stringstream stream(pages);
 		while( getline(stream, s, ',') ) {
-			if (s.find("fms.") != std::string::npos) a_joystickin->add_page(new mfdpage_t(s.c_str(), a_joystickout, a_dataconnection,button_num,"fms",a_fms_ref));
-			else if (s.find("flight.") != std::string::npos) a_joystickin->add_page(new mfdpage_t(s.c_str(), a_joystickout, a_dataconnection,button_num,"flight",NULL));
-			else if (s.find("weather.") != std::string::npos) a_joystickin->add_page(new mfdpage_t(s.c_str(), a_joystickout, a_dataconnection,button_num,"weather",NULL));
-			else if (s.find("std.") != std::string::npos) a_joystickin->add_page(new mfdpage_t(s.c_str(), a_joystickout, a_dataconnection,button_num,"std",NULL));
+            if (s.find("fms.") != std::string::npos) a_in->add_page(new mfdpage_t(s.c_str(), a_out, a_dataconnection,button_num,"fms",a_fms_ref));
+            else if (s.find("flight.") != std::string::npos) a_in->add_page(new mfdpage_t(s.c_str(), a_out, a_dataconnection,button_num,"flight",NULL));
+            else if (s.find("weather.") != std::string::npos) a_in->add_page(new mfdpage_t(s.c_str(), a_out, a_dataconnection,button_num,"weather",NULL));
+            else if (s.find("std.") != std::string::npos) a_in->add_page(new mfdpage_t(s.c_str(), a_out, a_dataconnection,button_num,"std",NULL));
 			else debug_out(warn,"mfdpages: unknown mfdpage class for %s",s.c_str());
 		}
 	}
 	// Add the time page
-	mfdpage_t* time_page = new mfdpage_t("time", a_joystickout, a_dataconnection,0,"time",NULL);
-	a_joystickin->add_page(time_page);
+    mfdpage_t* time_page = new mfdpage_t("time", a_out, a_dataconnection,0,"time",NULL);
+    a_in->add_page(time_page);
 	time_page->set_active(true);
 	// Add the led (invisible) page
-	mfdpage_t* led_page = new mfdpage_t("led", a_joystickout, a_dataconnection,0,"led",NULL);
-	a_joystickin->add_page(led_page);
+    mfdpage_t* led_page = new mfdpage_t("led", a_out, a_dataconnection,0,"led",NULL);
+    a_in->add_page(led_page);
 	led_page->set_active(true);
 	// Add the FMS refresh (invisible) page
-	mfdpage_t* fms_refresh_page = new mfdpage_t("fms.refresh", a_joystickout, a_dataconnection,0,"fms",a_fms_ref);
-	a_joystickin->add_page(fms_refresh_page);
+    mfdpage_t* fms_refresh_page = new mfdpage_t("fms.refresh", a_out, a_dataconnection,0,"fms",a_fms_ref);
+    a_in->add_page(fms_refresh_page);
 	fms_refresh_page->set_active(true);
 	// Add the welcome page
-	mfdpage_t* welcome_page = new mfdpage_t("welcome", a_joystickout, a_dataconnection,0,"std",NULL);
-	a_joystickin->add_page(welcome_page);
+    mfdpage_t* welcome_page = new mfdpage_t("welcome", a_out, a_dataconnection,0,"std",NULL);
+    a_in->add_page(welcome_page);
 	welcome_page->set_active(true);
 }
 ////////////////////////////
@@ -176,10 +176,10 @@ void mfdpage_t::final_refresh(void)
     a_data = a_page->refresh_template(a_name,a_datasources,a_template);
 	if (a_type == "time") {
 			debug_out(verbose, "mfdpage: updating time %c:%c - %d/%d/%d", a_page->a_time["hour"],a_page->a_time["minute"],a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
-		    a_outdevice->time(true, a_page->a_time["hour"],a_page->a_time["minute"]);
-			a_outdevice->date(a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
+            a_outdevice->a_joystick->set_time(true, a_page->a_time["hour"],a_page->a_time["minute"]);
+            a_outdevice->a_joystick->set_date(a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
 	} else { // print something on the MFD
-		a_outdevice->set_textdata(a_data.c_str());
-		a_outdevice->print();
+        a_outdevice->a_joystick->set_textdata(a_data.c_str());
+        a_outdevice->a_joystick->print();
 	}	
 }

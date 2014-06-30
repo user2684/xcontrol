@@ -6,38 +6,30 @@
 
 using namespace std;
 
-struct usb_dev_handle;
+class out_joystick_t
+{
+public:
+    virtual void set_display_brightness(char brightness)=0;
+    virtual void set_led_brightness(char brightness)=0;
+    virtual void set_textdata(const char* text)=0;
+    virtual string get_text(void)=0;
+    virtual void set_led(int led, int on)=0;
+    virtual void set_time(bool h24, int hour, int minute)=0;
+    virtual void set_date(int year, int month, int day)=0;
+    virtual void print(void)=0;
+    virtual void init(void)=0;
+    virtual void deinit(void)=0;
+private:
+};
 
 class out_t : public tools_t
 {
 public:
     out_t(void);
     ~out_t(void);
-
-    void set_textdata(const char* text);
-    void print(const char* text, ...);
-    void print();
-    void time(bool h24, char hour, char minute);
-    void date(int year, int month, int day);
-    void display_brightness(char brightness);
-    void led_brightness(char brightness);
-    void set_led(int led, int on);
-    void set_led_by_name(int led_debug, const char* dateref, int data,const char* action, ...);
-    void clear(void);
-    int led_debug;
-	struct libusb_device_handle* a_joydev;
-	
+    out_joystick_t* a_joystick;
 private:
-    void setbrightness(bool mfd, char brightness);
-    void setled(int led, int on);
-    void settext(int line, const char *text, int length);
-    void settime(int h24, int hour, int minute);
-    void setdate(int year, int month, int day);
-    void cleartext(int line);
-    usb_dev_handle* a_usbhdl;
-    int product;
-    std::string a_textdata;
-
 };
+
 
 #endif /* OUT_H */

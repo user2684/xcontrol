@@ -38,7 +38,7 @@ void config_t::read_config(void) {
 
 // read the main config
 void config_t::read_config_main(void) {
-	control_config = do_read_config((char *)"Resources/plugins/control/control.ini"); // load the main config file
+    control_config = do_read_config((char *)"Resources/plugins/xcontrol/xcontrol.ini"); // load the main config file
 }
 
 // read the fms config
@@ -46,7 +46,7 @@ void config_t::read_config_fms(void) {
 	string aircraft_path = get_fms_local_path(); 
 	if (aircraft_path.length() > 0) control_config_fms = do_read_config((char*)aircraft_path.c_str()); // try loading the fms.ini file within the local aircraft folder
 	// if not found, load the fms.ini at the plugin directory
-	if (control_config_fms.empty()) control_config_fms = do_read_config((char *)"Resources/plugins/control/fms.ini");
+    if (control_config_fms.empty()) control_config_fms = do_read_config((char *)"Resources/plugins/xcontrol/xfms.ini");
 }
 
 // Build the fms.ini path relative to the loaded aircraft
@@ -134,7 +134,7 @@ void config_t::debug_out(int type, const char* msg, ...)
 	if ((type == debug) && (a_debug <1)) return;
 	if ((type == verbose) && (a_debug<2)) return;
 	FILE * log;
-	log = fopen ("Resources/plugins/control/log.txt","a");
+    log = fopen ("Resources/plugins/xcontrol/xlog.txt","a");
     va_list ap;
     va_start(ap, msg);
     switch (type)

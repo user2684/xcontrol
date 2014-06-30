@@ -18,11 +18,10 @@ public:
     ~session_t(void);
     int enable(void);
     void disable(void);
-	int a_joy;
 private:
-    out_t* a_joystickout;
-    in_t* a_joystickin;
-    data_t* a_dataconnection;
+    out_t* a_out;
+    in_t* a_in;
+    data_t* a_data;
 	gui_t* a_gui;
 	fms_t* a_fms;
 	mfdpages_t* a_mfdpages;

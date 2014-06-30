@@ -16,12 +16,12 @@ class mfdpage_type_t;
 class mfdpages_t : public tools_t
 {
 public:
-	mfdpages_t(out_t* joystickout,in_t* joystickin,data_t* dataconnection,fms_t* fms_ref);
+    mfdpages_t(out_t* out,in_t* in,data_t* dataconnection,fms_t* fms_ref);
 	~mfdpages_t(void);
 	void load(void);
 private:
-    out_t* a_joystickout;
-    in_t* a_joystickin;
+    out_t* a_out;
+    in_t* a_in;
     data_t* a_dataconnection;
 	fms_t* a_fms_ref;
 };

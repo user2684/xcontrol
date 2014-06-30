@@ -6,17 +6,17 @@ using std::set;
 
 in_t::in_t(void) : a_currentpage(0)
 {
-    a_cmd_pagecycle_1 = XPLMCreateCommand("sim/instruments/_cycle_button_1", "cycles through button 1 datapages on the  display");
-	if (!a_cmd_pagecycle_1)  debug_out(err,"in: wasn't able to create custom _cycle_button_1 X-Plane commands");
+    a_cmd_pagecycle_1 = XPLMCreateCommand("sim/instruments/xcontrol_cycle_button_1", "cycles through button 1 datapages on the display");
+    if (!a_cmd_pagecycle_1)  debug_out(err,"in: wasn't able to create custom xcontrol_cycle_button_1 X-Plane commands");
     XPLMRegisterCommandHandler(a_cmd_pagecycle_1, dispatch_command, 0, this);
-	a_cmd_pagecycle_2 = XPLMCreateCommand("sim/instruments/_cycle_button_2", "cycles through button 2 datapages on the  display");
-    if (!a_cmd_pagecycle_2)  debug_out(err, "in: wasn't able to create custom _cycle_button_2 X-Plane commands");
+    a_cmd_pagecycle_2 = XPLMCreateCommand("sim/instruments/xcontrol_cycle_button_2", "cycles through button 2 datapages on the display");
+    if (!a_cmd_pagecycle_2)  debug_out(err, "in: wasn't able to create custom xcontrol_cycle_button_2 X-Plane commands");
     XPLMRegisterCommandHandler(a_cmd_pagecycle_2, dispatch_command, 0, this);
-	a_cmd_pagecycle_3 = XPLMCreateCommand("sim/instruments/_cycle_button_3", "cycles through button 3 datapages on the  display");
-    if (!a_cmd_pagecycle_3)  debug_out(err, "in: wasn't able to create custom _cycle_button_3 X-Plane commands");
+    a_cmd_pagecycle_3 = XPLMCreateCommand("sim/instruments/xcontrol_cycle_button_3", "cycles through button 3 datapages on the display");
+    if (!a_cmd_pagecycle_3)  debug_out(err, "in: wasn't able to create custom xcontrol_cycle_button_3 X-Plane commands");
     XPLMRegisterCommandHandler(a_cmd_pagecycle_3, dispatch_command, 0, this);
-	a_cmd_pagecycle_4 = XPLMCreateCommand("sim/instruments/_cycle_button_4", "cycles through button 4 datapages on the  display");
-    if (!a_cmd_pagecycle_4)  debug_out(err, "in: wasn't able to create custom _cycle_button_4 X-Plane commands");
+    a_cmd_pagecycle_4 = XPLMCreateCommand("sim/instruments/xcontrol_cycle_button_4", "cycles through button 4 datapages on the display");
+    if (!a_cmd_pagecycle_4)  debug_out(err, "in: wasn't able to create custom xcontrol_cycle_button_4 X-Plane commands");
     XPLMRegisterCommandHandler(a_cmd_pagecycle_4, dispatch_command, 0, this);
 }
 

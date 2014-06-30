@@ -18,27 +18,20 @@ using std::map;
 using std::string;
 extern const char* version;
 
-session_t::session_t(void) : a_joystickout(0), a_joystickin(0), a_dataconnection(0)
+session_t::session_t(void) : a_out(0), a_in(0), a_data(0)
 {
-	debug_out(info, "session: Saitek  Control Enhanced plugin version %s",version);
+    debug_out(info, "session: X Control Enhanced plugin version %s",version);
 	debug_out(debug, "session: instantiating connection to the Joystick");
-    a_joystickout = new out_t();
-	if (a_joystickout->a_joydev == NULL) { // joystick not found
-		a_joy = 0;
-		debug_out(warn, "session: no joystick found or error connecting to it");
-	} else  { // joystick found
-		a_joy = 1;
-		debug_out(debug, "session: configuring buttons in x-plane");
-		a_joystickin = new in_t();
-		debug_out(info, "session: Establishing data connection");
-		a_dataconnection = new data_t();
-		debug_out(debug, "session: Configuring the FMS");
-		a_fms = new fms_t();
-		debug_out(debug, "session: Creating MFD pages");
-		a_mfdpages = new mfdpages_t(a_joystickout,a_joystickin,a_dataconnection,a_fms);
-		a_mfdpages->load(); // create default pages
-	}
-	// create the UI regardless
+    a_out = new out_t();
+    debug_out(debug, "session: configuring buttons in x-plane");
+    a_in = new in_t();
+    debug_out(info, "session: establishing data connection");
+    a_data = new data_t();
+    debug_out(debug, "session: configuring the FMS");
+    a_fms = new fms_t();
+    debug_out(debug, "session: creating MFD pages");
+    a_mfdpages = new mfdpages_t(a_out,a_in,a_data,a_fms);
+    a_mfdpages->load(); // create default pages
 	a_gui = new gui_t(a_mfdpages,a_fms);
 }
 
@@ -46,24 +39,24 @@ session_t::~session_t(void)
 {
 	debug_out(debug, "session: deleting session");
 	delete a_mfdpages;
-    delete a_joystickin;
-    delete a_dataconnection;
+    delete a_in;
+    delete a_data;
 	delete a_gui;
 	delete a_fms;
-    if (a_joy) delete a_joystickout;
+    delete a_out;
 	debug_out(info, "session: exited");
 }
 
 int session_t::enable(void)
 {
-    a_dataconnection->connect(0.5f);
-	a_gui->enable(a_joy);
+    a_data->connect(0.5f);
+    a_gui->enable(true);
     return 1;
 }
 
 void session_t::disable(void)
 {
-    a_dataconnection->disconnect();
+    a_data->disconnect();
 	a_gui->disable();
 }
 

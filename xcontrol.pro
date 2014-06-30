@@ -13,7 +13,7 @@ DEFINES += XPLM200
 
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0
-    LIBS += -L../xcontrol/lib/win/32 -lXPLM -lXPWidgets -lusb-1.0
+    LIBS += -L../../../xcontrol/lib/win/32 -lXPLM -lXPWidgets -lusb
     TARGET = win.xpl
 }
 
@@ -34,7 +34,8 @@ macx {
 HEADERS		+= include/*.h
 HEADERS		+= *.h
 
-SOURCES		+= main.cpp
+SOURCES		+= main.cpp \
+    out_saitek.cpp
 SOURCES		+= session.cpp
 SOURCES		+= tools.cpp
 SOURCES		+= data.cpp
