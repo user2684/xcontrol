@@ -2,10 +2,10 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "XPLM/XPLMDefs.h"
-#include "session.h"
+#include "./include/SDK/XPLMDefs.h"
+#include "include/session.h"
 
-const char* version = BUILD_VERSION;
+const char* version = "0.6.1b";
 
 #if IBM
 #include <windows.h>

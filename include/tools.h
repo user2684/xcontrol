@@ -3,7 +3,7 @@
 
 #include <string>
 #include <map>
-#include "config.h"
+
 
 using namespace std;
 

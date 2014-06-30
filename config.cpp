@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include "tools.h"
+#include "include/tools.h"
+#include "include/config.h"
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "XPLM/XPLMPlanes.h"
+#include "include/SDK/XPLMPlanes.h"
+#include <cstdlib>
 
 using namespace std;
 using std::map;

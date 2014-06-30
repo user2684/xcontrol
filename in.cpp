@@ -1,7 +1,6 @@
-//#include <sys/time.h>
-#include "XPLM/XPLMUtilities.h"
-#include "mfdpage.h"
-#include "in.h"
+#include "include/SDK/XPLMUtilities.h"
+#include "include/mfdpage.h"
+#include "include/in.h"
 
 using std::set;
 

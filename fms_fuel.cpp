@@ -1,10 +1,10 @@
 #include <map>
 #include <string>
-#include "tools.h"
+#include "include/tools.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <fms_fuel.h>
-#include "XPLM/XPLMDataAccess.h"
+#include "include/fms_fuel.h"
+#include "include/SDK/XPLMDataAccess.h"
 #include <math.h>
 
 using namespace std;

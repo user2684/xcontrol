@@ -3,9 +3,9 @@
 
 #include <map>
 #include <string>
-#include "XPLM/XPLMNavigation.h"
-#include <fms_utils.h>
-#include <fms_config.h>
+#include "include/SDK/XPLMNavigation.h"
+#include "include/fms_utils.h"
+#include "include/fms_config.h"
 
 class fms_fp_t;
 class fms_fp_item_t;

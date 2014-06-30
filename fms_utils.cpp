@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include "fms_utils.h"
+#include "include/fms_utils.h"
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <string.h>
 #define pi 3.14159265358979323846
 
 using namespace std;

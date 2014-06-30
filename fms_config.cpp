@@ -2,11 +2,12 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "tools.h"
+#include "include/tools.h"
+#include "include/config.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fms_config.h>
+#include <include/fms_config.h>
 
 using namespace std;
 using std::map;
@@ -30,8 +31,8 @@ fms_config_t::~fms_config_t(void)
 // load the fms profiles
 void fms_config_t::load(void) {
 	a_fms_config.clear(); // clear the fms configuration
-	config_t * a_config = config_t::getInstance();
-	a_config=a_config->get_config_fms();
+    config_t * a_configuration = config_t::getInstance();
+    a_config=a_configuration->get_config_fms();
 	load_config();
 	load_profiles();
 	calculate_climb_desc();

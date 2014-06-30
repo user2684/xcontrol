@@ -2,16 +2,16 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "tools.h"
-#include "fms.h"
-#include "XPLM/XPLMNavigation.h"
-#include "XPLM/XPLMProcessing.h"
-#include "XPLM/XPLMDataAccess.h"
+#include "include/tools.h"
+#include "include/fms.h"
+#include "include/SDK/XPLMNavigation.h"
+#include "include/SDK/XPLMProcessing.h"
+#include "include/SDK/XPLMDataAccess.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <fms_fp.h>
+#include <include/fms_fp.h>
 
 using namespace std;
 using std::map;

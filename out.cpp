@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include "libusb/libusb.h"
-#include "out.h"
+#include "include/libusb-1.0/libusb.h"
+#include "include/out.h"
 
 extern const char* version;
 

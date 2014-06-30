@@ -1,16 +1,17 @@
 #include <string>
 #include <map>
-#include "XPLM/XPLMDisplay.h"
-#include "XPLM/XPLMUtilities.h"
-#include "XPLM/XPLMDataAccess.h"
-#include "XPLM/XPLMMenus.h"
-#include "XPLM/XPLMGraphics.h"
-#include "XPLM/XPWidgets.h"
-#include "XPLM/XPStandardWidgets.h"
-#include "XPLM/XPLMDefs.h"
-#include "gui.h"
-#include "fms.h"
-#include <fms_fp.h>
+#include "include/SDK/XPLMDisplay.h"
+#include "include/SDK/XPLMUtilities.h"
+#include "include/SDK/XPLMDataAccess.h"
+#include "include/SDK/XPLMMenus.h"
+#include "include/SDK/XPLMGraphics.h"
+#include "include/SDK/XPWidgets.h"
+#include "include/SDK/XPStandardWidgets.h"
+#include "include/SDK/XPLMDefs.h"
+#include "include/gui.h"
+#include "include/fms.h"
+#include "include/fms_fp.h"
+#include "include/config.h"
 
 using namespace std;
 using std::map;

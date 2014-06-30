@@ -4,9 +4,9 @@
 #include <string>
 #include <map>
 #include <math.h>
-#include <mfdpage_std.h>
-#include "XPLM/XPLMProcessing.h"
-#include "XPLM/XPLMDataAccess.h"
+#include <include/mfdpage_std.h>
+#include "include/SDK/XPLMProcessing.h"
+#include "include/SDK/XPLMDataAccess.h"
 
 
 using std::map;

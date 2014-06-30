@@ -1,8 +1,8 @@
 #include <sstream>
-#include "XPLM/XPLMProcessing.h"
-#include "XPLM/XPLMDataAccess.h"
-#include "data.h"
-#include "mfdpage.h"
+#include "include/SDK/XPLMProcessing.h"
+#include "include/SDK/XPLMDataAccess.h"
+#include "include/data.h"
+#include "include/mfdpage.h"
 
 using std::set;
 

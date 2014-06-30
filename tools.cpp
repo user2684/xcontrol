@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include "tools.h"
+#include "include/tools.h"
+#include "include/config.h"
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 using namespace std;
 using std::map;
