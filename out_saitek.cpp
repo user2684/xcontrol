@@ -6,9 +6,9 @@
 
 #include "include/out_saitek.h"
 
-#if IBM
+#if IBM // Use libusb v0.1 on windows since libusb-win32 is the only library able to provide a filter driver
 #include "include/libusb/lusb0_usb.h"
-#else
+#else // Use libusb v1.0 for the other platforms
 #include "include/libusb-1.0/libusb.h"
 #endif
 
@@ -59,13 +59,14 @@ void out_saitek_t::deinit(void)
 bool out_saitek_t::search(void)
 {
     int supported_devices [4] = { x52_standard_device1, x52_standard_device2, x52_pro_device, x52_other_device};
-
+#if IBM // on Windows, with libusb v0.1
     usb_bus* bus               = 0;
     struct usb_device* dev     = 0;
     usb_device_descriptor* dsc = 0;
 
     debug_out(debug,"out_saitek: libusb v0.1 in use");
     usb_init();
+    debug_out(debug, "out_saitek: probing for a supported joystick");
     int busses = usb_find_busses();
     int devices = usb_find_devices();
     debug_out(debug, "out_saitek: enumerated %d busses and %d devices",busses,devices);
@@ -89,6 +90,24 @@ bool out_saitek_t::search(void)
         }
         if (a_joydev) break;
     }
+#else // on Linux and Mac, with libusb v1.0
+    debug_out(debug,"out_saitek: libusb v1.0 in use");
+    int r = libusb_init(NULL);
+    if (r < 0) {
+        debug_out(err, "out_saitek: failed to initialize libusb: %d",r);
+        return false;
+    }
+    debug_out(debug, "out_saitek: probing for a supported joystick");
+    for (int i = 0; i<=3; i++) {
+            debug_out(verbose, "out_saitek: searching for Product ID: 0x%.4X",supported_devices[i]);
+            a_joydev = libusb_open_device_with_vid_pid(NULL, saitek_vendor, supported_devices[i]);
+            if (a_joydev != NULL) {
+                debug_out(info, "out_saitek: found Saitek X52 Flight Control System  (Product ID: 0x%.4X)",supported_devices[i]);
+                product = supported_devices[i];
+                break;
+            }
+    }
+#endif
     if (a_joydev == NULL) {
         debug_out(err, "out_saitek: cannot find any supported device");
         return false;
@@ -99,12 +118,20 @@ bool out_saitek_t::search(void)
 // Attach to the device and initialize it
 bool out_saitek_t::attach(void)
 {
+#if IBM // on Windows, with libusb v0.1
     a_usbhdl = usb_open(a_joydev);
     if (!a_usbhdl) {
         debug_out(warn,"out_saitek: could not open joystick");
         a_joydev = NULL;
         return false;
     }
+#else // on Linux and Mac, with libusb v1.0
+    int r = libusb_claim_interface(a_joydev, 0);
+    if (r < 0) {
+        debug_out(warn, "x52out: cannot claim usb interface (error: %d), running as an unprovileged user",r);
+        //Do nothing, on MacOSX returns always LIBUSB_ERROR_ACCESS (-3)
+    }
+#endif
     debug_out(debug, "out_saitek: setting initial brightness and welcome message");
     set_display_brightness(0x7F);
     set_led_brightness(0x7F);
@@ -115,14 +142,21 @@ bool out_saitek_t::attach(void)
 // Detach from the device
 bool out_saitek_t::detach(void)
 {
+    if (!a_attached)return false;
     debug_out(info, "out_saitek: detaching joystick connection");
     print(OFFLINE_MSG);
     set_time(true, 0, 0);
     set_date(0, 0, 0);
     set_display_brightness(0x00);
     set_led_brightness(0x00);
+#if IBM // on Windows, with libusb v0.1
     int res = usb_close(a_usbhdl);
     if (res < 0) debug_out(err,"out_saitek: error while detaching the joystick: %d",res);
+#else // on Linux and Mac, with libusb v1.0
+    libusb_release_interface(a_joydev, 0);
+    libusb_close(a_joydev);
+    libusb_exit(NULL);
+#endif
     debug_out(info,"out_saitek: joystick disconnected cleanly");
     return true;
 }
@@ -266,11 +300,18 @@ int out_saitek_t::send_usb(int index, int value)
     // requesttype: instruct for outboud connection
     // request: Saitek only uses endpoint 0x91
     // message: Saitek uses index and value to communicate with the joystick
+#if IBM // on Windows, with libusb v0.1
     int requesttype = USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_OUT;
+#else // on Linux and Max, with libusb v1.0
+    int requesttype = LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_DEVICE | LIBUSB_ENDPOINT_OUT;
+#endif
     int request = 0x91;
     int timeout = 100;
     debug_out(verbose,"out_saitek: sending to usb requesttype: %d,request: %d,index: %d,value: %d",requesttype,request,index,value);
+#if IBM // on Windows, with libusb v0.1
     return usb_control_msg(a_usbhdl,requesttype,request,value,index,0,0,timeout);
-
+#else // on Linux and Max, with libusb v1.0
+    return libusb_control_transfer(a_joydev,requesttype,request,value,index,0,0,timeout);
+#endif
 }
 

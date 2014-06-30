@@ -1,5 +1,7 @@
 #include <string>
 #include <map>
+#include <cstdlib>
+#include <cstring>
 #include "include/SDK/XPLMDisplay.h"
 #include "include/SDK/XPLMUtilities.h"
 #include "include/SDK/XPLMDataAccess.h"

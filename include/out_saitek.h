@@ -34,7 +34,11 @@ private:
     int send_usb(int index, int value);
     std::string a_textdata;
     bool a_attached;
+#if IBM // on Windows, with libusb v0.1
     struct usb_device* a_joydev;
+#else // on Linux and Mac, with libusb v1.0
+    struct libusb_device_handle* a_joydev;
+#endif
     usb_dev_handle* a_usbhdl;
     int product;
 };
