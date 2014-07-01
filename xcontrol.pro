@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 32bit
+CONFIG += 64bit
 
 ######################################
 # Define global variables
@@ -44,7 +44,8 @@ unix|macx {
 ######################################
 unix:!macx {
     DEFINES += APL=0 IBM=0 LIN=1
-    TARGET = lin.xpl
+    32bit:TARGET = lin_32.xpl
+    64bit:TARGET = lin_64.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
     LIBS += -L../Libs -lusb-1.0
 }
