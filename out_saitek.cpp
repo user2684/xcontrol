@@ -16,7 +16,7 @@ extern const char* version;
 
 // define the messages to display when the plugin load/unload
 #define OFFLINE_MSG  "   Saitek X52\n     Flight\n Control System"
-#define ONLINE_MSG   "   xcontrol  \n \n ver %s", version
+#define ONLINE_MSG   "X Control Plugin\n \n ver %s", version
 
 // Define supported joystick IDs
 enum saitek_vendors

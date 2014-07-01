@@ -1,10 +1,3 @@
-#include "include/out.h"
-#include "include/in.h"
-#include "include/data.h"
-#include "include/mfdpage.h"
-#include "include/session.h"
-#include "include/fms.h"
-#include "include/gui.h"
 #include <iostream>
 #include <fstream>
 #include <iostream>
@@ -12,6 +5,14 @@
 #include <string>
 #include <sstream>
 #include <iterator>
+
+#include "include/out.h"
+#include "include/in.h"
+#include "include/data.h"
+#include "include/mfdpage.h"
+#include "include/session.h"
+#include "include/fms.h"
+#include "include/gui.h"
 
 using namespace std;
 using std::map;

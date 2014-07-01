@@ -1,9 +1,11 @@
 #include <string.h>
+#include <time.h>
 #include <ctime>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <map>
+
 #include "include/mfdpage_time.h"
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
@@ -42,11 +44,11 @@ string mfdpage_time_t::refresh_template(string name,std::map<int, object_t*> a_d
 	a_mins = (a_secs%3600)/60;
 	a_secs = (a_secs%3600)%60;
 	a_time_t = time(NULL);
-//    localtime_r(&a_time_t, &a_tr);
+    struct tm * today = localtime(&a_time_t);
 	a_time["hour"] = a_hours;
 	a_time["minute"] = a_mins;
-	a_date["year"] = a_tr.tm_year+1900;
-	a_date["month"] = a_tr.tm_mon+1;
-	a_date["day"] = a_tr.tm_mday;
+    a_date["year"] = today->tm_year+1900;
+    a_date["month"] = today->tm_mon+1;
+    a_date["day"] = today->tm_mday;
     return "";
 }

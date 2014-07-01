@@ -2,10 +2,11 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "include/SDK/XPLMDefs.h"
 #include "include/session.h"
 
-const char* version = "0.7.0a";
+extern const char* version = "0.7.0a";
 
 #if IBM
 #include <windows.h>

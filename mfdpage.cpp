@@ -6,10 +6,11 @@
 #include <sstream>
 #include <map>
 #include <iostream>
+#include <math.h>
+
 #include "include/out.h"
 #include "include/data.h"
 #include "include/fms.h"
-#include "math.h"	
 #include "include/in.h"
 #include "include/config.h"
 #include "include/mfdpage.h"

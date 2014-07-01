@@ -8,19 +8,12 @@ CONFIG -= thread exceptions qt rtti
 VERSION = 1.0.0
 
 INCLUDEPATH += ./include
-#QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
 DEFINES += XPLM200
 
 win32 {
-    DEFINES += APL=0 IBM=1 LIN=0
+    DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
     LIBS += -L../../../xcontrol/lib/win/64 -lXPLM -lXPWidgets -llibusb0
     TARGET = win.xpl
-    QMAKE_LFLAGS += /MACHINE:X64
-}
-
-win32-g++:contains(QMAKE_HOST.arch, x86_64):{
-    LIBS -= -L../../../xcontrol/lib/win/32
-    LIBS += -L../../../xcontrol/lib/win/64
 }
 
 unix:!macx {
@@ -28,6 +21,7 @@ unix:!macx {
     TARGET = lin.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
     LIBS += -lusb-1.0
+    QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
 }
 
 macx {
@@ -35,6 +29,7 @@ macx {
     TARGET = mac.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
+    QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
 }
 
 HEADERS		+= include/*.h
