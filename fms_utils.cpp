@@ -8,6 +8,10 @@
 #include "include/fms_utils.h"
 #define pi 3.14159265358979323846
 
+#if IBM
+#define snprintf _snprintf
+#endif
+
 using namespace std;
 using std::map;
 using std::string;
@@ -35,7 +39,7 @@ string fms_utils_t::minutes2time(float minutes) {
 	if (hours < 0) hours += 24;
 	char buffer[130];
 	string time;
-	_snprintf(buffer, 130, "%02i:%02i", hours,mins);
+    snprintf(buffer, 130, "%02i:%02i", hours,mins);
 	time.assign(buffer);
 	//debug_out(verbose,"fms_utils: converted minutes %f into time %s",minutes,time.c_str());
 	return time;
@@ -87,8 +91,8 @@ string fms_utils_t::altitude2string(float altitude) {
 	string result;
 	memset(temp, 0, 2048);
 	if (altitude <100 ) return "-";
-	if (altitude > 7000) _snprintf(temp, 2048, "FL%2.0f0",altitude/1000); // assuming TA = FL70
-	else _snprintf(temp, 2048, "%2.0f00f",altitude/100); // below TA
+    if (altitude > 7000) snprintf(temp, 2048, "FL%2.0f0",altitude/1000); // assuming TA = FL70
+    else snprintf(temp, 2048, "%2.0f00f",altitude/100); // below TA
 	result.assign(temp);
 	if (result == "00") return "-";
 	return result;
@@ -100,9 +104,9 @@ string fms_utils_t::delay2string(float minutes) {
 	string result;
 	memset(temp, 0, 2048);
 	if (minutes == 0 || minutes > 99 || minutes < -99) return "-";
-	if (minutes >= 1) _snprintf(temp, 2048, "+%.0f",minutes);
-	else if (minutes <= -1) _snprintf(temp, 2048, "-%.0f",fabs(minutes));
-	else _snprintf(temp, 2048, "0");
+    if (minutes >= 1) snprintf(temp, 2048, "+%.0f",minutes);
+    else if (minutes <= -1) snprintf(temp, 2048, "-%.0f",fabs(minutes));
+    else snprintf(temp, 2048, "0");
 	result.assign(temp);
 	return result;
 }

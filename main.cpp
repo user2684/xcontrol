@@ -6,7 +6,7 @@
 #include "include/SDK/XPLMDefs.h"
 #include "include/session.h"
 
-extern const char* version = "0.7.0a";
+const char* version = "0.7.0a";
 
 #if IBM
 #include <windows.h>

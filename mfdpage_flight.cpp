@@ -9,6 +9,9 @@
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
 
+#if IBM
+#define snprintf _snprintf
+#endif
 
 using std::map;
 using std::string;
@@ -133,17 +136,17 @@ string mfdpage_flight_t::refresh_template(string name,std::map<int, object_t*> a
 					// check whether we are squawking ident right now
 					//float ident = XPLMGetDataf(XPLMFindDataRef("sim/cockpit2/radios/indicators/transponder_id"));
 					//if (ident) transponder = "I";
-                    _snprintf(temp, 2048, t2.c_str(),transponder.c_str());
+                    snprintf(temp, 2048, t2.c_str(),transponder.c_str());
 					break;
 				}
 				if (refName == "sim/cockpit/switches/gear_handle_status"){
 					string gear;
 					if ((int)f == 0) gear = "UP";
 					if (f == 1) gear = "DW";
-                    _snprintf(temp, 2048, t2.c_str(),gear.c_str());
+                    snprintf(temp, 2048, t2.c_str(),gear.c_str());
 					break;
 				}	
-                _snprintf(temp, 2048, t2.c_str(),f);
+                snprintf(temp, 2048, t2.c_str(),f);
 				break;
 			case xplmType_Float:
 				f = (float)*a_datasources[(*it).first];
@@ -151,7 +154,7 @@ string mfdpage_flight_t::refresh_template(string name,std::map<int, object_t*> a
 					if (f == 0) runaway = "0";
 					if (f == 1) runaway = "M";
 					if (f == 2) runaway = "H";
-                    _snprintf(temp, 2048, t2.c_str(),runaway.c_str());
+                    snprintf(temp, 2048, t2.c_str(),runaway.c_str());
 					break;
 				}	
 				if (refName == "sim/weather/visibility_reported_m")  { f = f/1000;  }		
@@ -166,14 +169,14 @@ string mfdpage_flight_t::refresh_template(string name,std::map<int, object_t*> a
 					if (tas == 0 ) f = 0;
 					else f = fabs(tas / f);
 				}	
-                _snprintf(temp, 2048, t2.c_str(),f);
+                snprintf(temp, 2048, t2.c_str(),f);
 				break;
 			case xplmType_Double:
 				d = (double)*a_datasources[(*it).first];
-                _snprintf(temp, 2048, t2.c_str(),d);
+                snprintf(temp, 2048, t2.c_str(),d);
 				break;
 			case xplmType_Data:
-                _snprintf(temp, 2048, t2.c_str(),(const char*)*(a_datasources[(*it).first]));
+                snprintf(temp, 2048, t2.c_str(),(const char*)*(a_datasources[(*it).first]));
 				break;
 		}
 		

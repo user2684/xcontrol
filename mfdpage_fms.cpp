@@ -8,6 +8,10 @@
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
 
+#if IBM
+#define snprintf _snprintf
+#endif
+
 using std::map;
 using std::string;
 
@@ -82,7 +86,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 				// <arrival_apt> <remaining_distance> <fuel_eta>
 				// <hh_eta>:<mm_eta> <id_name>
 				// <distance>/<remaining>m <hh_time>:<mm_time>
-                _snprintf(temp, 2048, "%4s %4.0fm %.5s\n%.5s %.10s\n%3.0fm/%4.0fm %.5s",
+                snprintf(temp, 2048, "%4s %4.0fm %.5s\n%.5s %.10s\n%3.0fm/%4.0fm %.5s",
 					a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_name.c_str(),
 					a_fms_ref->remaining_distance(),
 					a_fms_ref->a_fuel_ref->remaining().c_str(),
@@ -96,7 +100,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 				// <id_name> <time_actual>
 				// <time_expected> (<delay_from_scheduled>/<delay_from_expected>)
 				// <altitude_expected> (<altitude_actual>)
-                _snprintf(temp, 2048, "%5s %5s\n%5s (%3s/%3s)\n%5s (%5s)",
+                snprintf(temp, 2048, "%5s %5s\n%5s (%3s/%3s)\n%5s (%5s)",
 					a_fms_ref->a_fp_ref->a_fp[displayed_index]->a_name.c_str(),
 					minutes2time(a_fms_ref->a_fp_ref->a_fp[displayed_index]->a_time_actual).c_str(),
 					minutes2time(a_fms_ref->a_fp_ref->a_fp[displayed_index]->a_time_scheduled).c_str(),
@@ -107,7 +111,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 				);
 			}
 		} 	else
-            _snprintf(temp, 2048, "     STATUS     \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
+            snprintf(temp, 2048, "     STATUS     \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
 	}
 	else if (name == "fms.planner") { 
 		memset(temp, 0, 2048);
@@ -115,7 +119,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 			// <departure_apt>-><arrival_apt> <total_distance>
 			// D:<duration> F:<fuel>
 			// <distance>/<remaining>m <hh_time>:<mm_time>
-            _snprintf(temp, 2048, "%4s->%4s %4.0fm\nD:%.5s F:%6.0f\nTD:%.13s",
+            snprintf(temp, 2048, "%4s->%4s %4.0fm\nD:%.5s F:%6.0f\nTD:%.13s",
 			a_fms_ref->a_fp_ref->a_fp[0]->a_name.c_str(),
 			a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_name.c_str(),
 			a_fms_ref->a_fp_ref->a_total_distance,
@@ -123,7 +127,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 			a_fms_ref->a_fuel_ref->a_lb_to_load,
 			a_fms_ref->a_fp_ref->tod_string.c_str());		
 		} else 
-            _snprintf(temp, 2048, "    PLANNER     \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
+            snprintf(temp, 2048, "    PLANNER     \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
 	}
 	else if (name == "fms.scheduler") { // FMS page is handled in a different way than the others
 		memset(temp, 0, 2048);
@@ -131,7 +135,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 			// T:<expected_takeoff_time> (<actual_takeoff_time>)
 			// C:<expected_top_of_climb_time> D:<expected_top_of_descend_time>
 			// L:<expected_landing_time> (<actual_landing_time>)
-            _snprintf(temp, 2048, "T:%.5s (%.5s)\nC:%.5s D:%.5s\nL:%.5s (%.5s)",
+            snprintf(temp, 2048, "T:%.5s (%.5s)\nC:%.5s D:%.5s\nL:%.5s (%.5s)",
 			minutes2time(a_fms_ref->a_fms_config_ref->a_fms_config["scheduled_takeoff"]).c_str(),
 			minutes2time(a_fms_ref->a_fp_ref->a_fp[0]->a_time_actual).c_str(),
 			minutes2time(a_fms_ref->a_fp_ref->a_toc->a_time_scheduled).c_str(),
@@ -139,7 +143,7 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 			minutes2time(a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_time_scheduled).c_str(),
 			minutes2time(a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_time_actual).c_str());
 		} else
-            _snprintf(temp, 2048, "   SCHEDULER    \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
+            snprintf(temp, 2048, "   SCHEDULER    \nFMS NOT READY\nStatus:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
 	}
 	string temp_string;
 	temp_string.assign(temp);

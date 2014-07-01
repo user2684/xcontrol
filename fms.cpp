@@ -13,6 +13,9 @@
 #include "include/SDK/XPLMDataAccess.h"
 #include "include/SDK/XPLMUtilities.h"
 
+#if IBM
+#define snprintf _snprintf
+#endif
 
 using namespace std;
 using std::map;
@@ -57,7 +60,7 @@ void fms_t::refresh(void)
 		load();
 		// voice report
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "%s to %s, %.0f miles,  %s minutes",
+        snprintf(voice_1, 2048, "%s to %s, %.0f miles,  %s minutes",
 			a_fp_ref->a_fp[0]->a_name.c_str(),
 			a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_name.c_str(),
 			a_fp_ref->a_total_distance,
@@ -221,7 +224,7 @@ void fms_t::check_gate_departure(float speed) {
 		debug_out(info,"fms: leaving the gate at %s",minutes2time(a_fp_ref->a_fp[0]->a_time_at_gate).c_str());
 		// voice report
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "We are leaving departure gate in %s now at %s and we expect to take off at %s. The distance to %s will be %.0f miles and we expect to land at %s, %s minutes after our departure",
+        snprintf(voice_1, 2048, "We are leaving departure gate in %s now at %s and we expect to take off at %s. The distance to %s will be %.0f miles and we expect to land at %s, %s minutes after our departure",
 			a_fp_ref->a_fp[0]->a_full_name.c_str(),
 			minutes2time(a_fp_ref->a_fp[0]->a_time_at_gate).c_str(),
 			minutes2time(a_fp_ref->a_fp[0]->a_time_scheduled).c_str(),
@@ -248,7 +251,7 @@ void fms_t::check_takeoff(float speed) {
 		debug_out(info,"fms: takeoff recorded at %s, flight status set to cruise",minutes2time(a_fp_ref->a_fp[0]->a_time_actual).c_str());
 		// voice report
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "Reporting take off at %s, delay %s minutes. Landing expected at %s",
+        snprintf(voice_1, 2048, "Reporting take off at %s, delay %s minutes. Landing expected at %s",
 			minutes2time(a_fp_ref->a_fp[0]->a_time_actual).c_str(),
 			delay2string(a_fp_ref->a_fp[0]->a_delay_from_scheduled).c_str(),
 			minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_expected).c_str()
@@ -271,7 +274,7 @@ void fms_t::check_landing(float speed) {
 		debug_out(info,"fms: landing recorded at %s, flight status set to arrival",minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_actual).c_str());
 		// voice report
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "Reporting landing at %s, delay %s minutes. Flight duration %s, expected %s",
+        snprintf(voice_1, 2048, "Reporting landing at %s, delay %s minutes. Flight duration %s, expected %s",
 			minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_actual).c_str(),
 			delay2string(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_delay_from_scheduled).c_str(),
 			minutes2time(actual_duration).c_str(),
@@ -290,7 +293,7 @@ void fms_t::check_gate_arrival(void) {
 		debug_out(info,"fms: arriving at the gate at %s",minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_at_gate).c_str());
 		// voice report
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "Arriving at gate at %s",minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_at_gate).c_str());
+        snprintf(voice_1, 2048, "Arriving at gate at %s",minutes2time(a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_time_at_gate).c_str());
 		if (a_fms_config_ref->a_fms_config["voice"] >0)XPLMSpeakString(voice_1);
 	} 
 }
@@ -308,7 +311,7 @@ void fms_t::check_position(void) {
 	if (changed && current_entry_index != 1 && current_entry_index != a_current_entry_index+1) {  // we are not flying to the next entry, this is a FLY_DIRECT
 		debug_out(info,"fms: flying direct to %s",entry_name(current_entry_index).c_str());
 		char voice_1[2048] = "";
-		_snprintf(voice_1, 2048, "Reporting direct flight to %s",entry_name(current_entry_index).c_str());
+        snprintf(voice_1, 2048, "Reporting direct flight to %s",entry_name(current_entry_index).c_str());
 		if (a_fms_config_ref->a_fms_config["voice"] >0)XPLMSpeakString(voice_1);
 	}
 	if (current_entry_index == a_current_entry_index+1)  {  // the index has increased, we are now flying to the next entry
@@ -326,12 +329,12 @@ void fms_t::check_position(void) {
 		);
 		// voice report
 		char voice_1[2048] = ""; char voice_2[2048] = "";
-		_snprintf(voice_1, 2048, "Reporting over %s at %s, delay %s minutes",
+        snprintf(voice_1, 2048, "Reporting over %s at %s, delay %s minutes",
 			entry_name(a_current_entry_index).c_str(),
 			minutes2time(a_fp_ref->a_fp[a_current_entry_index]->a_time_actual).c_str(),
 			delay2string(a_fp_ref->a_fp[a_current_entry_index]->a_delay_from_scheduled).c_str()
 		);
-		_snprintf(voice_2, 2048, "Reporting over %s at %s, scheduled at %s, delay from schedule %s minutes, delay from expected %s minutes, altitude %s, expected altitude %s",
+        snprintf(voice_2, 2048, "Reporting over %s at %s, scheduled at %s, delay from schedule %s minutes, delay from expected %s minutes, altitude %s, expected altitude %s",
 			entry_name(a_current_entry_index).c_str(),
 			minutes2time(a_fp_ref->a_fp[a_current_entry_index]->a_time_actual).c_str(),
 			minutes2time(a_fp_ref->a_fp[a_current_entry_index]->a_time_scheduled).c_str(),

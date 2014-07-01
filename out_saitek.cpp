@@ -6,6 +6,11 @@
 
 #include "include/out_saitek.h"
 
+#if IBM
+#define snprintf _snprintf
+#endif
+
+
 #if IBM // Use libusb v0.1 on windows since libusb-win32 is the only library able to provide a filter driver
 #include "include/libusb/lusb0_usb.h"
 #else // Use libusb v1.0 for the other platforms
@@ -246,7 +251,7 @@ void out_saitek_t::print(const char* t, ...)
     if (!strlen(t)) return;
     va_list ap;
     va_start(ap, t);
-    _snprintf(text, 51, t, ap);
+    snprintf(text, 51, t, ap);
     va_end(ap);
 
     char* token = strtok(text, "\n");

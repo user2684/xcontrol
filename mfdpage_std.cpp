@@ -9,6 +9,9 @@
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
 
+#if IBM
+#define snprintf _snprintf
+#endif
 
 using std::map;
 using std::string;
@@ -97,14 +100,14 @@ string mfdpage_std_t::refresh_template(string name,std::map<int, object_t*> a_da
             } else {
                 i = (int)*a_datasources[(*it).first]/100;
             }
-            _snprintf(temp, 2048, t2.c_str(), i);
+            snprintf(temp, 2048, t2.c_str(), i);
         } else if (a_name == "std.radio.adf") {
             i = (int)*a_datasources[(*it).first];
-            _snprintf(temp, 2048, t2.c_str(), i);
+            snprintf(temp, 2048, t2.c_str(), i);
         } else {
             //now "std.radio.com" or "std.radio.nav"
             f = (int)*a_datasources[(*it).first]/100.0f;
-            _snprintf(temp, 2048, t2.c_str(), f);
+            snprintf(temp, 2048, t2.c_str(), f);
         }		
         t2 = temp;
         p = 0;
