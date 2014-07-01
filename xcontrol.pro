@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 64bit
+CONFIG += 32bit
 
 ######################################
 # Define global variables
@@ -22,10 +22,21 @@ DEFINES += XPLM200
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
-    LIBS += -lXPLM -lXPWidgets -llibusb0
+    LIBS += -L../../../lib/win
     TARGET = win.xpl
-    32bit:LIBS += -L../../../xcontrol/lib/win/32
-    64bit:LIBS += -L../../../xcontrol/lib/win/64
+    32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
+    64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
+}
+
+######################################
+# *unix platform common variables
+######################################
+unix|macx {
+    QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
+    32bit:QMAKE_CXXFLAGS += -m32
+    32bit:QMAKE_LFLAGS += -m32
+    64bit:QMAKE_CXXFLAGS += -m64
+    64bit:QMAKE_LFLAGS += -m64
 }
 
 ######################################
@@ -35,8 +46,7 @@ unix:!macx {
     DEFINES += APL=0 IBM=0 LIN=1
     TARGET = lin.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
-    LIBS += -lusb-1.0
-    QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
+    LIBS += -L../Libs -lusb-1.0
 }
 
 ######################################
@@ -47,7 +57,6 @@ macx {
     TARGET = mac.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
-    QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
 }
 
 ######################################

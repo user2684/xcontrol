@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.exp
 
 # Compiled Dynamic libraries
 *.so
@@ -21,7 +22,6 @@
 *.app
 
 # C++ objects and libs
-
 *.slo
 *.lo
 *.o
@@ -33,7 +33,6 @@
 *.dylib
 
 # Qt-es
-
 /.qmake.cache
 /.qmake.stash
 *.pro.user
@@ -46,5 +45,7 @@ Makefile*
 *-build-*
 
 # QtCreator
-
 *.autosave
+
+# Whitelist
+!lib*

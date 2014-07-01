@@ -1,0 +1,6 @@
+BUGS:
+- version xp10 mfd
+- virtual mfd
+- speak when changed
+
+NEW FEATURES:
