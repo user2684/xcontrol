@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <include/fms_fp.h>
+#include "include/fms_fp.h"
 
 using namespace std;
 using std::map;
@@ -237,7 +237,7 @@ void fms_fp_t::load_time(fms_fp_item_t* prev_item, fms_fp_item_t* item) {
 			// set the TOD string
 			float distance_to_tod = a_fms_config_ref->a_fms_config["desc_distance"] - item->a_distance_from_arrival;
 			char buffer[130];
-			snprintf(buffer, 130, "%3.0fm to %.5s", distance_to_tod,item->a_name.c_str());
+            _snprintf(buffer, 130, "%3.0fm to %.5s", distance_to_tod,item->a_name.c_str());
 			tod_string.assign(buffer);
 			debug_out(debug, "fms_fp: TOD is %s",tod_string.c_str());
 			if (prev_item->a_flight_status == "cruise") { // first item after the TOD
@@ -296,15 +296,15 @@ void fms_fp_t::save(void)
 		if (item->a_type ==xplm_Nav_LatLon) { // must be in the format +00.000_+000.000
 			char lat[2048] = {};
 			memset(lat, 0, 2048);
-			if (item->a_lat < 0) snprintf(lat, 2048, "-%06.03f",fabs(item->a_lat));
-			else snprintf(lat, 2048, "+%06.03f",fabs(item->a_lat));
+            if (item->a_lat < 0) _snprintf(lat, 2048, "-%06.03f",fabs(item->a_lat));
+            else _snprintf(lat, 2048, "+%06.03f",fabs(item->a_lat));
 			char lon[2048] = {};
 			memset(lon, 0, 2048);
-			if (item->a_lon < 0) snprintf(lon, 2048, "-%07.03f",fabs(item->a_lon));
-			else snprintf(lon, 2048, "+%07.03f",fabs(item->a_lon));
+            if (item->a_lon < 0) _snprintf(lon, 2048, "-%07.03f",fabs(item->a_lon));
+            else _snprintf(lon, 2048, "+%07.03f",fabs(item->a_lon));
 			char latlon[2048] = {};
 			memset(latlon, 0, 2048);
-			snprintf(latlon, 2048, "%s_%s",lat,lon);
+            _snprintf(latlon, 2048, "%s_%s",lat,lon);
 			name.assign(latlon);
 		} else name = item->a_name;
 		fprintf(fp, "%d %s %d.000000 %.6f %.6f\r\n",type,name.c_str(),(int)item->a_altitude,item->a_lat,item->a_lon);

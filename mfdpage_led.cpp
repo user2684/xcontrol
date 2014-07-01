@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string>
 #include <map>
-#include <include/mfdpage_led.h>
-#include <include/config.h>
-#include <include/out.h>
+#include "include/mfdpage_led.h"
+#include "include/config.h"
+#include "include/out.h"
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
 

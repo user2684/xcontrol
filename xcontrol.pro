@@ -8,13 +8,19 @@ CONFIG -= thread exceptions qt rtti
 VERSION = 1.0.0
 
 INCLUDEPATH += ./include
-QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
+#QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
 DEFINES += XPLM200
 
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0
-    LIBS += -L../../../xcontrol/lib/win/32 -lXPLM -lXPWidgets -lusb0
+    LIBS += -L../../../xcontrol/lib/win/64 -lXPLM -lXPWidgets -llibusb0
     TARGET = win.xpl
+    QMAKE_LFLAGS += /MACHINE:X64
+}
+
+win32-g++:contains(QMAKE_HOST.arch, x86_64):{
+    LIBS -= -L../../../xcontrol/lib/win/32
+    LIBS += -L../../../xcontrol/lib/win/64
 }
 
 unix:!macx {

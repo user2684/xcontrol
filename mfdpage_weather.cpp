@@ -133,10 +133,10 @@ string mfdpage_weather_t::refresh_template(string name,std::map<int, object_t*> 
 					if (f == 3) cloud = " BKN ";
 					if (f == 4) cloud = " OVC ";
 					if (f == 5) cloud = " STR ";
-					snprintf(temp, 2048, t2.c_str(),cloud.c_str());
+                    _snprintf(temp, 2048, t2.c_str(),cloud.c_str());
 					break;
 				}
-				snprintf(temp, 2048, t2.c_str(),f);
+                _snprintf(temp, 2048, t2.c_str(),f);
 				break;
 			case xplmType_Float:
 				f = (float)*a_datasources[(*it).first];
@@ -145,21 +145,21 @@ string mfdpage_weather_t::refresh_template(string name,std::map<int, object_t*> 
 					if (f == 0) runaway = "0";
 					if (f == 1) runaway = "M";
 					if (f == 2) runaway = "H";
-					snprintf(temp, 2048, t2.c_str(),runaway.c_str());
+                    _snprintf(temp, 2048, t2.c_str(),runaway.c_str());
 					break;
 				}	
 				if (refName == "sim/weather/rain_percent"){ f = f*10;}	
 				if (std::string::npos != refName.find("sim/weather/cloud_base_msl_m") || std::string::npos != refName.find("sim/weather/cloud_tops_msl_m") || std::string::npos != refName.find("sim/weather/wind_altitude_msl_m")){
 					f = f*3.2808399/100;
 				}
-				snprintf(temp, 2048, t2.c_str(),f);
+                _snprintf(temp, 2048, t2.c_str(),f);
 				break;
 			case xplmType_Double:
 				d = (double)*a_datasources[(*it).first];
-				snprintf(temp, 2048, t2.c_str(),d);
+                _snprintf(temp, 2048, t2.c_str(),d);
 				break;
 			case xplmType_Data:
-				snprintf(temp, 2048, t2.c_str(),(const char*)*(a_datasources[(*it).first]));
+                _snprintf(temp, 2048, t2.c_str(),(const char*)*(a_datasources[(*it).first]));
 				break;
 		}
 		

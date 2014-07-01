@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <math.h>
-#include <include/mfdpage_std.h>
+#include "include/mfdpage_std.h"
 #include "include/SDK/XPLMProcessing.h"
 #include "include/SDK/XPLMDataAccess.h"
 
@@ -96,14 +96,14 @@ string mfdpage_std_t::refresh_template(string name,std::map<int, object_t*> a_da
             } else {
                 i = (int)*a_datasources[(*it).first]/100;
             }
-            snprintf(temp, 2048, t2.c_str(), i);
+            _snprintf(temp, 2048, t2.c_str(), i);
         } else if (a_name == "std.radio.adf") {
             i = (int)*a_datasources[(*it).first];
-            snprintf(temp, 2048, t2.c_str(), i);
+            _snprintf(temp, 2048, t2.c_str(), i);
         } else {
             //now "std.radio.com" or "std.radio.nav"
             f = (int)*a_datasources[(*it).first]/100.0f;
-            snprintf(temp, 2048, t2.c_str(), f);
+            _snprintf(temp, 2048, t2.c_str(), f);
         }		
         t2 = temp;
         p = 0;

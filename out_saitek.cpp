@@ -35,6 +35,8 @@ enum saitek_products
 
 out_saitek_t::out_saitek_t(void)
 {
+    a_attached = false;
+    a_joydev = NULL;
 }
 
 // Init the library
@@ -244,7 +246,7 @@ void out_saitek_t::print(const char* t, ...)
     if (!strlen(t)) return;
     va_list ap;
     va_start(ap, t);
-    vsnprintf(text, 51, t, ap);
+    _snprintf(text, 51, t, ap);
     va_end(ap);
 
     char* token = strtok(text, "\n");

@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 #include <map>
 #include <cstdlib>
 #include <cstring>
@@ -71,7 +72,7 @@ void gui_t::enable(void) {
     a_fms_utils_ref = new fms_utils_t();
     XPLMAppendMenuItem(myMenu,"FMS Settings",(void*)1,1);
     XPLMAppendMenuItem(myMenu,"Show FMS Satus",(void*)2,1);
-    XPLMAppendMenuItem(myMenu,"Show MFS",(void*)3,1);
+    XPLMAppendMenuItem(myMenu,"Show Virtual MFD",(void*)3,1);
     XPLMAppendMenuSeparator(myMenu);
     XPLMAppendMenuItem(myMenu,"Reset the plugin",(void*)4,1);
     fms_status_hotkey = XPLMRegisterHotKey(XPLM_VK_B, xplm_DownFlag + xplm_ShiftFlag + xplm_ControlFlag,"Show control FMS Status",fms_status_hotkey_handler,NULL);
@@ -217,7 +218,7 @@ void gui_t::fms_status_create_window(void){
 	XPAddWidgetCallback(fms_status_refresh, fms_option_handler);
 	// build the trip summary
 	if (a_fms_ref->a_fp_ref->a_status > 0) { 
-		snprintf(temp, 2048, "%s (at %5s) -> %s (at %5s)",
+		_snprintf(temp, 2048, "%s (at %5s) -> %s (at %5s)",
 			a_fms_ref->a_fp_ref->a_fp[0]->a_name.c_str(),
 			a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_fp[0]->a_time_scheduled).c_str(),
 			a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_name.c_str(),
@@ -225,16 +226,16 @@ void gui_t::fms_status_create_window(void){
 			);
 		y1 -= h;  y2= y1-box_h;
 		XPCreateWidget(x1,y1, x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
-		snprintf(temp, 2048, "Distance: %.0f nm. Expected duration: %5s",
+		_snprintf(temp, 2048, "Distance: %.0f nm. Expected duration: %5s",
 			a_fms_ref->a_fp_ref->a_total_distance,
 			a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_total_time).c_str()
 			);
 		y1 -= h;  y2= y1-box_h;
 		XPCreateWidget(x1,y1, x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
-		snprintf(temp, 2048, "Left departure gate at: %s",a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_fp[0]->a_time_at_gate).c_str());
+		_snprintf(temp, 2048, "Left departure gate at: %s",a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_fp[0]->a_time_at_gate).c_str());
 		y1 -= h;  y2= y1-box_h;
 		XPCreateWidget(x1,y1, x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
-		snprintf(temp, 2048, "Arrived at the gate at: %s",a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_time_at_gate).c_str());
+		_snprintf(temp, 2048, "Arrived at the gate at: %s",a_fms_utils_ref->minutes2time(a_fms_ref->a_fp_ref->a_fp[a_fms_ref->a_fp_ref->a_arrival_index]->a_time_at_gate).c_str());
 		y1 -= h;  y2= y1-box_h;
 		XPCreateWidget(x1,y1, x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 		// build the legend
@@ -294,7 +295,7 @@ void gui_t::fms_status_create_window(void){
 				x1 = x2;  x2 = x1 +box_l; 
 				XPCreateWidget(x1,y1,x2,y2,1,"",0,fms_status_widget,xpWidgetClass_Caption);
 				x1 = x2;  x2 = x1 +box_l; 
-				snprintf(temp, 2048,"%.0fnm",a_fms_ref->a_fms_config_ref->a_fms_config["climb_distance"]);
+				_snprintf(temp, 2048,"%.0fnm",a_fms_ref->a_fms_config_ref->a_fms_config["climb_distance"]);
 				XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 				x1 = x2;  x2 = x1 +box_l+30; 
 				XPCreateWidget(x1,y1,x2,y2,1,"",0,fms_status_widget,xpWidgetClass_Caption);
@@ -334,7 +335,7 @@ void gui_t::fms_status_create_window(void){
 				x1 = x2;  x2 = x1 +box_l;
 				XPCreateWidget(x1,y1,x2,y2,1,"",0,fms_status_widget,xpWidgetClass_Caption);
 				x1 = x2;  x2 = x1 +box_l+30; 
-				snprintf(temp, 2048,"%.0fnm",a_fms_ref->a_fms_config_ref->a_fms_config["desc_distance"]);
+				_snprintf(temp, 2048,"%.0fnm",a_fms_ref->a_fms_config_ref->a_fms_config["desc_distance"]);
 				XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 				x1 = x2;  x2 = x1 +box_l; 
 				XPCreateWidget(x1,y1,x2,y2,1,"",0,fms_status_widget,xpWidgetClass_Caption);
@@ -367,13 +368,13 @@ void gui_t::fms_status_create_window(void){
 			x1 = x2;  x2 = x1 +box_l; 
 			XPCreateWidget(x1,y1,x2,y2,1,item->a_flight_status.c_str(),0,fms_status_widget,xpWidgetClass_Caption);
 			x1 = x2;  x2 = x1 +box_l; 
-			snprintf(temp, 2048,"%.0fnm",item->a_distance_from_prev);
+			_snprintf(temp, 2048,"%.0fnm",item->a_distance_from_prev);
 			XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 			x1 = x2;  x2 = x1 +box_l; 
-			snprintf(temp, 2048,"%.0fnm",item->a_distance_from_departure);
+			_snprintf(temp, 2048,"%.0fnm",item->a_distance_from_departure);
 			XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 			x1 = x2;  x2 = x1 +box_l+30; 
-			snprintf(temp, 2048,"%.0fnm",item->a_distance_from_arrival);
+			_snprintf(temp, 2048,"%.0fnm",item->a_distance_from_arrival);
 			XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 			x1 = x2;  x2 = x1 +box_l; 
 			XPCreateWidget(x1,y1,x2,y2,1,a_fms_utils_ref->minutes2time(item->a_time_from_prev).c_str(),0,fms_status_widget,xpWidgetClass_Caption);
@@ -398,7 +399,7 @@ void gui_t::fms_status_create_window(void){
 			prev_item = item;
 		}
 	} else { 
-		snprintf(temp, 2048, "FMS NOT READY. Status:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
+		_snprintf(temp, 2048, "FMS NOT READY. Status:%.8s",a_fms_ref->a_fp_ref->status2string(a_fms_ref->a_fp_ref->a_status).c_str());
 		XPCreateWidget(x1,y1,x2,y2,1,temp,0,fms_status_widget,xpWidgetClass_Caption);
 	} 
 	// Add the callback
@@ -458,7 +459,7 @@ void gui_t::mfd_create_window(int x, int y, int w, int h){
     mfd_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,mfd_widget,xpWidgetClass_SubWindow);
     XPSetWidgetProperty(mfd_window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
     // build the labels and the text box widgets
-    snprintf(temp, 2048,a_out_ref->a_joystick->get_text().c_str());
+    _snprintf(temp, 2048,a_out_ref->a_joystick->get_text().c_str());
     XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,temp,0,fms_option_widget,xpWidgetClass_Caption);
     // Add the callback
     XPAddWidgetCallback(mfd_widget, mfd_handler);

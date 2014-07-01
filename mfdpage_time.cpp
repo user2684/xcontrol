@@ -1,4 +1,5 @@
 #include <string.h>
+#include <ctime>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -41,7 +42,7 @@ string mfdpage_time_t::refresh_template(string name,std::map<int, object_t*> a_d
 	a_mins = (a_secs%3600)/60;
 	a_secs = (a_secs%3600)%60;
 	a_time_t = time(NULL);
-	localtime_r(&a_time_t, &a_tr);
+//    localtime_r(&a_time_t, &a_tr);
 	a_time["hour"] = a_hours;
 	a_time["minute"] = a_mins;
 	a_date["year"] = a_tr.tm_year+1900;
