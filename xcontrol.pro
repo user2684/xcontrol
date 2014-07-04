@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 32bit
+CONFIG += 64bit
 
 ######################################
 # Define global variables
@@ -44,6 +44,17 @@ unix|macx {
         QMAKE_CXXFLAGS += -m64
         QMAKE_LFLAGS += -m64
     }
+    # Libusb-1.0 source files
+    INCLUDEPATH         += include/libusb-1.0
+    INCLUDEPATH         += include/libusb-1.0/os
+    SOURCES             += libusb-1.0/core.c
+    SOURCES             += libusb-1.0/descriptor.c
+    SOURCES             += libusb-1.0/io.c
+    SOURCES             += libusb-1.0/strerror.c
+    SOURCES             += libusb-1.0/sync.c
+    SOURCES             += libusb-1.0/hotplug.c
+    SOURCES             += libusb-1.0/os/threads_posix.c
+    SOURCES             += libusb-1.0/os/poll_posix.c
 }
 
 ######################################
@@ -54,7 +65,7 @@ unix:!macx {
     32bit:TARGET = lin_32.xpl
     64bit:TARGET = lin_64.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
-    LIBS += -L../Libs -lusb-1.0
+    SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
 }
 
 ######################################
@@ -66,19 +77,7 @@ macx {
     64bit:TARGET = mac_64.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
-    # Libusb-1.0 source files
-    INCLUDEPATH         += include/libusb-1.0
-    INCLUDEPATH         += include/libusb-1.0/os
-    SOURCES             += libusb-1.0/core.c
-    SOURCES             += libusb-1.0/descriptor.c
-    SOURCES             += libusb-1.0/io.c
-    SOURCES             += libusb-1.0/strerror.c
-    SOURCES             += libusb-1.0/sync.c
-    SOURCES             += libusb-1.0/hotplug.c
-    SOURCES             += libusb-1.0/os/darwin_usb.c
-    SOURCES             += libusb-1.0/os/threads_posix.c
-    SOURCES             += libusb-1.0/os/poll_posix.c
-
+    SOURCES += libusb-1.0/os/darwin_usb.c
 }
 
 ######################################

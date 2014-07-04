@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "libusb-1.0/config.h"
+#include "include/libusb-1.0/config.h"
 #include <ctype.h>
 #include <errno.h>
 #include <pthread.h>
