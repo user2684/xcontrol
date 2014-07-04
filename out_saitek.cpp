@@ -102,7 +102,7 @@ bool out_saitek_t::search(void)
     debug_out(debug,"out_saitek: libusb v1.0 in use");
     int r = libusb_init(NULL);
     if (r < 0) {
-        debug_out(err, "out_saitek: failed to initialize libusb: %d",r);
+        debug_out(err, "out_saitek: failed to initialize libusb: %s",libusb_strerror((enum libusb_error)r));
         return false;
     }
     debug_out(debug, "out_saitek: probing for a supported joystick");
@@ -136,14 +136,15 @@ bool out_saitek_t::attach(void)
 #else // on Linux and Mac, with libusb v1.0
 #if LIN // on Linux check whether a kernel driver is attached to interface, if so, detach it
     if (libusb_kernel_driver_active(a_joydev, 0)) {
+      debug_out(debug,"out_saitek: detaching kernel driver from the usb interface");
       int d = libusb_detach_kernel_driver(a_joydev, 0);
-      if (d < 0) debug_out(err,"out_saitek: error detaching kernel driver: %d",d);
+      if (d < 0) debug_out(err,"out_saitek: error detaching kernel driver: %s",libusb_strerror((enum libusb_error)d));
       else a_usb_detached = true;
     }
 #endif
     int r = libusb_claim_interface(a_joydev, 0);
     if (r < 0) {
-        debug_out(warn, "x52out: cannot claim usb interface (error: %d)",r);
+        debug_out(warn, "x52out: cannot claim usb interface (error: %s)",libusb_strerror((enum libusb_error)r));
         //Do nothing, on MacOSX returns always LIBUSB_ERROR_ACCESS (-3)
     }
 #endif
@@ -166,13 +167,13 @@ bool out_saitek_t::detach(void)
     set_led_brightness(0x00);
 #if IBM // on Windows, with libusb v0.1
     int res = usb_close(a_usbhdl);
-    if (res < 0) debug_out(err,"out_saitek: error while detaching the joystick: %d",res);
+    if (res < 0) debug_out(err,"out_saitek: error while detaching the joystick: %s",libusb_strerror((enum libusb_error)res));
 #else // on Linux and Mac, with libusb v1.0
     libusb_release_interface(a_joydev, 0);
 #if LIN // on Linux if we detached a kernel driver we need to attach it again
     if (a_usb_detached) {
       int d = libusb_attach_kernel_driver(a_joydev, 0);
-      if (d < 0) debug_out(err,"out_saitek: error attaching kernel driver: %d",d);
+      if (d < 0) debug_out(err,"out_saitek: error attaching kernel driver: %s",libusb_strerror((enum libusb_error)d));
       else a_usb_detached = false;
     }
 #endif
@@ -189,7 +190,7 @@ void out_saitek_t::set_display_brightness(char brightness) {
     int res = 0;
     bool mfd = true; // Turn the lights on for the MFD
     res = send_usb(mfd?0xB1:0xB2,brightness);
-    if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on display: %d",brightness,res);
+    if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on display: %s",brightness,libusb_strerror((enum libusb_error)res));
 }
 
 // Set the led brightness
@@ -199,7 +200,7 @@ void out_saitek_t::set_led_brightness(char brightness)
     int res = 0;
     bool mfd = false; // Do not turn the lights on for the MFD
     res = send_usb(mfd?0xB1:0xB2,brightness);
-    if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on LEDs: %d",brightness,res);
+    if (res < 0) debug_out(err,"out_saitek: error while setting brightness %c on LEDs: %s",brightness,libusb_strerror((enum libusb_error)res));
 }
 
 // Set the text for the MFD and buffer it
@@ -228,7 +229,7 @@ void out_saitek_t::set_led(int led, int on)
 {
     if (!a_attached) return;
     int res = send_usb(0xB8,on | (led<<8));
-    if (res < 0) debug_out(err,"out_saitek: cannot set let %d on %d: %d",led,on,res);
+    if (res < 0) debug_out(err,"out_saitek: cannot set let %d on %d: %s",led,on,libusb_strerror((enum libusb_error)res));
 }
 
 // Set the time on the MFD
@@ -237,7 +238,7 @@ void out_saitek_t::set_time(bool h24, int hour, int minute)
     if (!a_attached) return;
     unsigned short timedata = minute | (hour<<8) | (h24?0x8000:0);
     int res = send_usb(0xC0,timedata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set time to %c:%c: %d",hour,minute,res);
+    if (res < 0) debug_out(err,"out_saitek: cannot set time to %c:%c: %s",hour,minute,libusb_strerror((enum libusb_error)res));
 }
 
 // Set the date on the MFD
@@ -249,9 +250,9 @@ void out_saitek_t::set_date(int year, int month, int day)
     unsigned short datedata = day | (month<<8);
     unsigned short yeardata = year;
     res = send_usb(0xC4,datedata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set day to %d and month to %d: %d",day,month,res);
+    if (res < 0) debug_out(err,"out_saitek: cannot set day to %d and month to %d: %s",day,month,libusb_strerror((enum libusb_error)res));
     res = send_usb(0xC8,yeardata);
-    if (res < 0) debug_out(err,"out_saitek: cannot set your to %d: %d",year,res);
+    if (res < 0) debug_out(err,"out_saitek: cannot set year to %d: %s",year,libusb_strerror((enum libusb_error)res));
 }
 
 // print on the MFD the given text
@@ -302,7 +303,7 @@ void out_saitek_t::print_line(int line, const char *text, int length)
         if (length == 1) charpair = (0 << 8) + *text;
         else charpair = *(unsigned short*) text;
         res = send_usb(line_writectl[line],charpair);
-        if (res < 0) debug_out(err,"out_saitek: cannot print line %d with text '%s': %d",line,text,res);
+        if (res < 0) debug_out(err,"out_saitek: cannot print line %d with text '%s': %s",line,text,libusb_strerror((enum libusb_error)res));
         length -= 2;
         text += 2;
     }
@@ -313,7 +314,7 @@ void out_saitek_t::clear_line(int line)
 {
     unsigned char line_clearctl[3] = {0xD9, 0xDA, 0xDC};
     int res = send_usb(line_clearctl[line],0x00);
-    if (res < 0) debug_out(err,"out_saitek: cannot clear line %d: %d",line,res);
+    if (res < 0) debug_out(err,"out_saitek: cannot clear line %d: %s",line,libusb_strerror((enum libusb_error)res));
 }
 
 // Send a message to the USB device
@@ -329,7 +330,7 @@ int out_saitek_t::send_usb(int index, int value)
 #endif
     int request = 0x91;
     int timeout = 100;
-    debug_out(verbose,"out_saitek: sending to usb requesttype: %d,request: %d,index: %d,value: %d",requesttype,request,index,value);
+    debug_out(verbose,"out_saitek: sending to usb requesttype: 0x%x,request: 0x%x,index: 0x%x,value: 0x%x",requesttype,request,index,value);
 #if IBM // on Windows, with libusb v0.1
     return usb_control_msg(a_usbhdl,requesttype,request,value,index,0,0,timeout);
 #else // on Linux and Max, with libusb v1.0
