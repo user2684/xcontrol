@@ -33,10 +33,16 @@ win32 {
 ######################################
 unix|macx {
     QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
-    32bit:QMAKE_CXXFLAGS += -m32
-    32bit:QMAKE_LFLAGS += -m32
-    64bit:QMAKE_CXXFLAGS += -m64
-    64bit:QMAKE_LFLAGS += -m64
+    32bit {
+        QMAKE_CFLAGS += -m32
+        QMAKE_CXXFLAGS += -m32
+        QMAKE_LFLAGS += -m32
+    }
+    64bit {
+        QMAKE_CFLAGS += -m64
+        QMAKE_CXXFLAGS += -m64
+        QMAKE_LFLAGS += -m64
+    }
 }
 
 ######################################
@@ -55,18 +61,28 @@ unix:!macx {
 ######################################
 macx {
     DEFINES += APL=1 IBM=0 LIN=0
-    TARGET = mac.xpl
+    32bit:TARGET = mac_32.xpl
+    64bit:TARGET = mac_64.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
-    LIBS += -L../../lib/mac
-    32bit:LIBS += -lusb-1.0
-    64bit:LIBS += -lusb-1.0_64
+    INCLUDEPATH += ./libusb
+    SOURCES             += libusb/core.c
+    SOURCES             += libusb/descriptor.c
+    SOURCES             += libusb/io.c
+    SOURCES             += libusb/strerror.c
+    SOURCES             += libusb/sync.c
+    SOURCES             += libusb/hotplug.c
+    SOURCES             += libusb/os/darwin_usb.c
+    SOURCES             += libusb/os/threads_posix.c
+    SOURCES             += libusb/os/poll_posix.c
+
 }
 
 ######################################
 # Source Files - Headers
 ######################################
-HEADERS		+= include/*.h
+HEADERS		+= include/*.h \
+    include/version.h
 
 ######################################
 # Source Files - CPP

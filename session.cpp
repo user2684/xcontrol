@@ -13,15 +13,15 @@
 #include "include/session.h"
 #include "include/fms.h"
 #include "include/gui.h"
+#include "include/version.h"
 
 using namespace std;
 using std::map;
 using std::string;
-extern const char* version;
 
 session_t::session_t(void) : a_out(0), a_in(0), a_data(0)
 {
-    debug_out(info, "session: X Control Enhanced plugin version %s",version);
+    debug_out(info, "session: X Control Enhanced plugin version %s",plugin_version);
 	debug_out(debug, "session: instantiating connection to the Joystick");
     a_out = new out_t();
     debug_out(debug, "session: configuring buttons in x-plane");

@@ -5,8 +5,9 @@
 
 #include "include/SDK/XPLMDefs.h"
 #include "include/session.h"
+#include "include/version.h"
 
-const char* version = "0.7.0a";
+const char* plugin_version = "0.7.0d";
 
 #if IBM
 #include <windows.h>
@@ -46,7 +47,7 @@ static session_t* session = 0;
 PLUGIN_API int XPluginStart(char* name, char* signature, char* description)
 {
     strcpy(name, "xcontrol (");
-    strcat(name, version);
+    strcat(name, plugin_version);
     strcat(name, ")");
     strcpy(signature, "copai.equipment.control");
     strcpy(description, "provides enhanced features covering Saitek  products, compiled on ");

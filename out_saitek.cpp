@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "include/out_saitek.h"
+#include "include/version.h"
 
 #if IBM
 #define snprintf _snprintf
@@ -17,11 +18,10 @@
 #include "include/libusb-1.0/libusb.h"
 #endif
 
-extern const char* version;
-
 // define the messages to display when the plugin load/unload
+
 #define OFFLINE_MSG  "   Saitek X52\n     Flight\n Control System"
-#define ONLINE_MSG   "X Control Plugin\n \n ver %s", version
+#define ONLINE_MSG   "X Control Plugin\n Version %s \n   Loading...   ", plugin_version
 
 // Define supported joystick IDs
 enum saitek_vendors
