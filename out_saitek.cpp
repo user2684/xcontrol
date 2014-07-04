@@ -13,7 +13,7 @@
 
 
 #if IBM // Use libusb v0.1 on windows since libusb-win32 is the only library able to provide a filter driver
-#include "include/libusb/lusb0_usb.h"
+#include "include/libusb-win32/lusb0_usb.h"
 #else // Use libusb v1.0 for the other platforms
 #include "include/libusb-1.0/libusb.h"
 #endif

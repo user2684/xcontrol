@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "libusb/config.h"
+#include "libusb-1.0/config.h"
 #include <ctype.h>
 #include <errno.h>
 #include <pthread.h>
@@ -40,7 +40,7 @@
   #include <objc/objc-auto.h>
 #endif
 
-#include "darwin_usb.h"
+#include "os/darwin_usb.h"
 
 /* async event thread */
 static pthread_mutex_t libusb_darwin_at_mutex = PTHREAD_MUTEX_INITIALIZER;

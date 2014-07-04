@@ -33,7 +33,7 @@
 # include <windows.h>
 #endif
 
-#include "threads_posix.h"
+#include "os/threads_posix.h"
 
 int usbi_mutex_init_recursive(pthread_mutex_t *mutex, pthread_mutexattr_t *attr)
 {

@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 64bit
+CONFIG += 32bit
 
 ######################################
 # Define global variables
@@ -23,7 +23,7 @@ DEFINES += XPLM200
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
     TARGET = win.xpl
-    LIBS += -L../../../lib/win
+    LIBS += -L../../lib
     32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
 }
@@ -65,24 +65,23 @@ macx {
     64bit:TARGET = mac_64.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
-    INCLUDEPATH += ./libusb
-    SOURCES             += libusb/core.c
-    SOURCES             += libusb/descriptor.c
-    SOURCES             += libusb/io.c
-    SOURCES             += libusb/strerror.c
-    SOURCES             += libusb/sync.c
-    SOURCES             += libusb/hotplug.c
-    SOURCES             += libusb/os/darwin_usb.c
-    SOURCES             += libusb/os/threads_posix.c
-    SOURCES             += libusb/os/poll_posix.c
+    INCLUDEPATH += ./include/libusb-1.0
+    SOURCES             += libusb-1.0/core.c
+    SOURCES             += libusb-1.0/descriptor.c
+    SOURCES             += libusb-1.0/io.c
+    SOURCES             += libusb-1.0/strerror.c
+    SOURCES             += libusb-1.0/sync.c
+    SOURCES             += libusb-1.0/hotplug.c
+    SOURCES             += libusb-1.0/os/darwin_usb.c
+    SOURCES             += libusb-1.0/os/threads_posix.c
+    SOURCES             += libusb-1.0/os/poll_posix.c
 
 }
 
 ######################################
 # Source Files - Headers
 ######################################
-HEADERS		+= include/*.h \
-    include/version.h
+HEADERS		+= include/*.h
 
 ######################################
 # Source Files - CPP

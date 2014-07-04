@@ -43,6 +43,7 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *-build-*
+.DS_Store
 
 # QtCreator
 *.autosave
