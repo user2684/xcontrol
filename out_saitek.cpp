@@ -344,6 +344,6 @@ char* out_saitek_t::usb_error(int res)
 #if IBM // on Windows, with libusb v0.1
     return usb_strerror();
 #else // on Linux and Max, with libusb v1.0
-    return libusb_strerror((enum libusb_error)res);
+    return (char*) libusb_strerror((enum libusb_error)res);
 #endif
 }
