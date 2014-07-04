@@ -32,6 +32,7 @@ private:
     void print_line(int line, const char *text, int length);
     void clear_line(int line);
     int send_usb(int index, int value);
+    char* usb_error(int res);
     std::string a_textdata;
     bool a_attached;
 #if IBM // on Windows, with libusb v0.1

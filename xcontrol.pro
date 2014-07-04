@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 32bit
+CONFIG += 64bit
 
 ######################################
 # Define global variables
@@ -22,8 +22,9 @@ DEFINES += XPLM200
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
-    TARGET = win.xpl
-    LIBS += -L../../lib
+    32bit:TARGET = win_32.xpl
+    64bit:TARGET = win_64.xpl
+    LIBS += -L../lib
     32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
 }
@@ -65,7 +66,9 @@ macx {
     64bit:TARGET = mac_64.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
-    INCLUDEPATH += ./include/libusb-1.0
+    # Libusb-1.0 source files
+    INCLUDEPATH         += include/libusb-1.0
+    INCLUDEPATH         += include/libusb-1.0/os
     SOURCES             += libusb-1.0/core.c
     SOURCES             += libusb-1.0/descriptor.c
     SOURCES             += libusb-1.0/io.c
@@ -82,7 +85,9 @@ macx {
 # Source Files - Headers
 ######################################
 HEADERS		+= include/*.h
-
+HEADERS		+= include/libusb-1.0/*.h
+HEADERS		+= include/libusb-win32/*.h
+HEADERS		+= include/SDK/*.h
 ######################################
 # Source Files - CPP
 ######################################
