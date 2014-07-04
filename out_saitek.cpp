@@ -21,7 +21,7 @@
 // define the messages to display when the plugin load/unload
 
 #define OFFLINE_MSG  "   Saitek X52\n     Flight\n Control System"
-#define ONLINE_MSG   "X Control Plugin\n Version %s \n   Loading...   ", plugin_version
+#define ONLINE_MSG   "X Control Plugin\nVersion 0.7.0a \nLoading...   ", plugin_version
 
 // Define supported joystick IDs
 enum saitek_vendors

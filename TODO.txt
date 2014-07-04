@@ -4,3 +4,9 @@ BUGS:
 - speak when changed
 
 NEW FEATURES:
+- highlight flying entry in gui
+- joystick hotplug
+- fms without joystick
+- FP with arrival APT repeated
+- fuel eta for each entry
+- voice position report with button
