@@ -42,6 +42,7 @@ out_saitek_t::out_saitek_t(void)
 {
     a_attached = false;
     a_joydev = NULL;
+    a_usb_detached = false;
 }
 
 // Init the library
@@ -88,7 +89,7 @@ bool out_saitek_t::search(void)
                 debug_out(verbose, "out_saitek: searching for Product ID: 0x%.4X",supported_devices[i]);
                 if (dsc->idProduct == supported_devices[i]) {
                     debug_out(info, "out_saitek: found Saitek X52 Flight Control System  (Product ID: 0x%.4X)",supported_devices[i]);
-                    product = supported_devices[i];
+                    a_product = supported_devices[i];
                     a_joydev = dev;
                 }
                 if (a_joydev) break;
@@ -110,7 +111,7 @@ bool out_saitek_t::search(void)
             a_joydev = libusb_open_device_with_vid_pid(NULL, saitek_vendor, supported_devices[i]);
             if (a_joydev != NULL) {
                 debug_out(info, "out_saitek: found Saitek X52 Flight Control System  (Product ID: 0x%.4X)",supported_devices[i]);
-                product = supported_devices[i];
+                a_product = supported_devices[i];
                 break;
             }
     }
@@ -133,9 +134,16 @@ bool out_saitek_t::attach(void)
         return false;
     }
 #else // on Linux and Mac, with libusb v1.0
+#if LIN // on Linux check whether a kernel driver is attached to interface, if so, detach it
+    if (libusb_kernel_driver_active(a_joydev, 0)) {
+      int d = libusb_detach_kernel_driver(a_joydev, 0);
+      if (d < 0) debug_out(err,"out_saitek: error detaching kernel driver: %d",d);
+      else a_usb_detached = true;
+    }
+#endif
     int r = libusb_claim_interface(a_joydev, 0);
     if (r < 0) {
-        debug_out(warn, "x52out: cannot claim usb interface (error: %d), running as an unprovileged user",r);
+        debug_out(warn, "x52out: cannot claim usb interface (error: %d)",r);
         //Do nothing, on MacOSX returns always LIBUSB_ERROR_ACCESS (-3)
     }
 #endif
@@ -161,6 +169,13 @@ bool out_saitek_t::detach(void)
     if (res < 0) debug_out(err,"out_saitek: error while detaching the joystick: %d",res);
 #else // on Linux and Mac, with libusb v1.0
     libusb_release_interface(a_joydev, 0);
+#if LIN // on Linux if we detached a kernel driver we need to attach it again
+    if (a_usb_detached) {
+      int d = libusb_attach_kernel_driver(a_joydev, 0);
+      if (d < 0) debug_out(err,"out_saitek: error attaching kernel driver: %d",d);
+      else a_usb_detached = false;
+    }
+#endif
     libusb_close(a_joydev);
     libusb_exit(NULL);
 #endif
@@ -230,7 +245,7 @@ void out_saitek_t::set_date(int year, int month, int day)
 {
     if (!a_attached) return;
     int res;
-    if (product == x52_other_device) return;
+    if (a_product == x52_other_device) return;
     unsigned short datedata = day | (month<<8);
     unsigned short yeardata = year;
     res = send_usb(0xC4,datedata);
@@ -246,7 +261,7 @@ void out_saitek_t::print(const char* t, ...)
     // the display only supports 48 characters, we allow 2 additional newline
     // characters and a terminating null byte, any additional characters are discarded
     char text[51] = {};
-    if (!t || product == x52_other_device) return;
+    if (!t || a_product == x52_other_device) return;
     //clear();
     if (!strlen(t)) return;
     va_list ap;

@@ -40,7 +40,8 @@ private:
     struct libusb_device_handle* a_joydev;
 #endif
     usb_dev_handle* a_usbhdl;
-    int product;
+    int a_product;
+    bool a_usb_detached;
 };
 
 
