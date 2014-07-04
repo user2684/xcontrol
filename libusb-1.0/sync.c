@@ -17,7 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "libusb-1.0/config.h"
+#if LIN
+#include "include/libusb-1.0/config_lin.h"
+#else
+#include "include/libusb-1.0/config_mac.h"
+#endif
 #include <errno.h>
 #include <stdint.h>
 #include <stdlib.h>

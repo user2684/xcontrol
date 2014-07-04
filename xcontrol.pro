@@ -65,6 +65,7 @@ unix:!macx {
     32bit:TARGET = lin_32.xpl
     64bit:TARGET = lin_64.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
+    LIBS += -ludev
     SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
 }
 

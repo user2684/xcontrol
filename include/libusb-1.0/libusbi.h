@@ -21,7 +21,11 @@
 #ifndef LIBUSBI_H
 #define LIBUSBI_H
 
-#include "config.h"
+#if LIN
+#include "include/libusb-1.0/config_lin.h"
+#elif APL
+#include "include/libusb-1.0/config_mac.h"
+#endif
 
 #include <stdlib.h>
 
