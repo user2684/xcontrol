@@ -17,13 +17,11 @@ public:
 	int refresh_interval(string name);
     string refresh_template(string name,std::map<int, object_t*> a_datasources,string a_template);
 private:
-	fms_t* a_fms_ref;
 	string a_name;
 	char a_hours;
     char a_mins;
     int  a_secs;
     time_t a_time_t;
-    struct tm a_tr;
 };
 
 #endif /* MFDPAGE_TIME_H */

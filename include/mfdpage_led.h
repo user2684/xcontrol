@@ -19,12 +19,10 @@ public:
     string refresh_template(string name,std::map<int, object_t*> a_datasources,string a_template);
 private:
     void set_led_by_name(int led_debug, const char* dataref, int data, const char* action, ...);
-    fms_t* a_fms_ref;
 	string a_name;
 	int led_debug;
 	int a_gear;
     int a_autopilot_engaged;
-    int a_weapons_armed;
 	map<string,string> config;
 	out_t* a_outdevice;
 };

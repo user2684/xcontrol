@@ -22,8 +22,8 @@ DEFINES += XPLM200
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
-    LIBS += -L../../../lib/win
     TARGET = win.xpl
+    LIBS += -L../../../lib/win
     32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
 }
@@ -58,6 +58,9 @@ macx {
     TARGET = mac.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
+    LIBS += -L../../lib/mac
+    32bit:LIBS += -lusb-1.0
+    64bit:LIBS += -lusb-1.0_64
 }
 
 ######################################
