@@ -19,7 +19,7 @@ public:
     void set_display_brightness(char brightness);
     void set_led_brightness(char brightness);
     void set_textdata(const char* text);
-    string get_text(void);
+    string get_text(int line);
     void set_led(int led, int on);
     void set_time(bool h24, int hour, int minute);
     void set_date(int year, int month, int day);
@@ -33,8 +33,9 @@ private:
     void clear_line(int line);
     int send_usb(int index, int value);
     char* usb_error(int res);
-    std::string a_textdata;
     bool a_attached;
+    std::string a_textdata;
+    std::map<int, std::string> a_display;
 #if IBM // on Windows, with libusb v0.1
     struct usb_device* a_joydev;
 #else // on Linux and Mac, with libusb v1.0

@@ -12,7 +12,7 @@ public:
     virtual void set_display_brightness(char brightness)=0;
     virtual void set_led_brightness(char brightness)=0;
     virtual void set_textdata(const char* text)=0;
-    virtual string get_text(void)=0;
+    virtual string get_text(int line)=0;
     virtual void set_led(int led, int on)=0;
     virtual void set_time(bool h24, int hour, int minute)=0;
     virtual void set_date(int year, int month, int day)=0;

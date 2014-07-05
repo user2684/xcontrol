@@ -30,9 +30,6 @@ static XPWidgetID fms_option_widget;
 static XPWidgetID fms_option_window;
 static XPWidgetID fms_status_widget;
 static XPWidgetID fms_status_window;
-static XPWidgetID Label_fl;
-static XPWidgetID Label_gs;
-static XPWidgetID Label_takeoff;
 static XPWidgetID Text_fl;
 static XPWidgetID Text_gs;
 static XPWidgetID Text_takeoff;
@@ -52,6 +49,7 @@ static XPLMHotKeyID fms_status_hotkey = NULL;
 static out_t* a_out_ref;
 static XPWidgetID mfd_widget;
 static XPWidgetID mfd_window;
+static XPWidgetID mfd_refresh;
 
 gui_t::gui_t(void)
 {
@@ -77,7 +75,8 @@ void gui_t::enable(void) {
     a_fms_status_page = 0;
     a_fms_utils_ref = new fms_utils_t();
     XPLMAppendMenuItem(myMenu,"FMS Settings",(void*)1,1);
-    XPLMAppendMenuItem(myMenu,"Show FMS Satus",(void*)2,1);
+    XPLMAppendMenuSeparator(myMenu);
+    XPLMAppendMenuItem(myMenu,"Show FMS Status",(void*)2,1);
     XPLMAppendMenuItem(myMenu,"Show Virtual MFD",(void*)3,1);
     XPLMAppendMenuSeparator(myMenu);
     XPLMAppendMenuItem(myMenu,"Reset the plugin",(void*)4,1);
@@ -102,7 +101,7 @@ void gui_t::menu_handler(void *inMenuRef, void *inItemRef) {
         mfd_window_handler();
     } else if(menuItem == 4) { // reset the plugin
 		a_fms_ref->reset(); // reset the FMS
-		a_mfdpages_ref->load(); // create the MFD pages
+        a_mfdpages_ref->load(); // recreate the MFD pages
 	} 	
 }
 
@@ -135,15 +134,15 @@ void gui_t::fms_option_create_window(int x, int y, int w, int h){
 	fms_option_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,fms_option_widget,xpWidgetClass_SubWindow);
 	XPSetWidgetProperty(fms_option_window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
 	// build the labels and the text box widgets
-	Label_fl = XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Requested Flight Level (FL)",0,fms_option_widget,xpWidgetClass_Caption);
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Requested Flight Level (FL)",0,fms_option_widget,xpWidgetClass_Caption);
 	Item++;
 	Text_fl = XPCreateWidget(x+120, y-(70 + (Item*30)), x+210, y-(92 + (Item*30)),1, buffer_fl, 0, fms_option_widget,xpWidgetClass_TextField);
 	Item++;
-	Label_gs = XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Requested Ground Speed (kts)",0,fms_option_widget,xpWidgetClass_Caption);
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Requested Ground Speed (kts)",0,fms_option_widget,xpWidgetClass_Caption);
 	Item++;
 	Text_gs = XPCreateWidget(x+120, y-(70 + (Item*30)), x+210, y-(92 + (Item*30)),1, buffer_gs, 0, fms_option_widget,xpWidgetClass_TextField);
 	Item++;
-	Label_takeoff = XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Expected Take-off Zulu Time (HH:MM)",0,fms_option_widget,xpWidgetClass_Caption);
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Expected Take-off Zulu Time (HH:MM)",0,fms_option_widget,xpWidgetClass_Caption);
 	Item++;
 	Text_takeoff = XPCreateWidget(x+120, y-(70 + (Item*30)), x+210, y-(92 + (Item*30)),1, buffer_takeoff, 0, fms_option_widget,xpWidgetClass_TextField);
 	// build the buttons
@@ -180,7 +179,7 @@ int gui_t::fms_option_handler(XPWidgetMessage inMessage,XPWidgetID inWidget,long
 }
 
 // handle the creation of the status window
-void	gui_t::fms_status_window_handler(void) {
+void gui_t::fms_status_window_handler(void) {
 		if (XPIsWidgetVisible(fms_status_widget)) XPHideWidget(fms_status_widget);
 		else {
 			fms_status_create_window();
@@ -441,7 +440,7 @@ int gui_t::fms_status_handler(XPWidgetMessage inMessage,XPWidgetID inWidget,long
 void	gui_t::mfd_window_handler(void) {
         if (XPIsWidgetVisible(mfd_widget)) XPHideWidget(mfd_widget);
         else {
-            mfd_create_window(300, 600, 300, 350);
+            mfd_create_window(300, 600, 250, 200);
             XPShowWidget(mfd_widget);
         }
 }
@@ -450,23 +449,23 @@ void	gui_t::mfd_window_handler(void) {
 void gui_t::mfd_create_window(int x, int y, int w, int h){
     int x2 = x + w;
     int y2 = y - h;
-    int Item =0;
-    char temp[2048] = {};
-    memset(temp, 0, 2048);
-    // retrieve default FL and GS
-    char buffer_fl[512],buffer_gs[512],buffer_takeoff[512];
-    map<string,string> config=a_config_ref->get_config_fms();
-    sprintf(buffer_fl, "%i",::atoi(config["cruise_fl"].c_str()));
-    sprintf(buffer_gs, "%i",::atoi(config["cruise_gs"].c_str()));
-    sprintf(buffer_takeoff, "%s",config["scheduled_takeoff"].c_str());
+    int Item =-1;
     // build the MFD window
+    XPDestroyWidget(mfd_widget, 1);
     mfd_widget = XPCreateWidget(x, y, x2, y2,1,"Virtual MFD",1,NULL,xpWidgetClass_MainWindow);
     XPSetWidgetProperty(mfd_widget, xpProperty_MainWindowHasCloseBoxes, 1);
     mfd_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,mfd_widget,xpWidgetClass_SubWindow);
     XPSetWidgetProperty(mfd_window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
-    // build the labels and the text box widgets
-    snprintf(temp, 2048,"%s",a_out_ref->a_joystick->get_text().c_str());
-    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,temp,0,fms_option_widget,xpWidgetClass_Caption);
+    // set the text
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,a_out_ref->a_joystick->get_text(0).c_str(),0,mfd_widget,xpWidgetClass_Caption);
+    Item++;
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,a_out_ref->a_joystick->get_text(1).c_str(),0,mfd_widget,xpWidgetClass_Caption);
+    Item++;
+    XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,a_out_ref->a_joystick->get_text(2).c_str(),0,mfd_widget,xpWidgetClass_Caption);
+    Item++;
+    mfd_refresh = XPCreateWidget(x+60+40, y-(70 + (Item*30))-45, x+115+40, y-(92 + (Item*30))-45,1, "Refresh", 0, mfd_widget,xpWidgetClass_Button);
+    XPSetWidgetProperty(mfd_refresh, xpProperty_ButtonType, xpPushButton);
+    XPAddWidgetCallback(mfd_refresh, mfd_handler);
     // Add the callback
     XPAddWidgetCallback(mfd_widget, mfd_handler);
 }
@@ -476,6 +475,12 @@ int gui_t::mfd_handler(XPWidgetMessage inMessage,XPWidgetID inWidget,long inPara
     if (inMessage == xpMessage_CloseButtonPushed){
             if(XPIsWidgetVisible(mfd_widget)) XPHideWidget(mfd_widget);
             return 1;
+    }
+    if (inMessage == xpMsg_PushButtonPressed){
+        if (inParam1 == (intptr_t)mfd_refresh){
+            mfd_create_window(300, 600, 250, 200);
+            return 1;
+        }
     }
     return 0;
 }

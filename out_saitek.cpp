@@ -206,21 +206,19 @@ void out_saitek_t::set_led_brightness(char brightness)
 // Set the text for the MFD and buffer it
 void out_saitek_t::set_textdata(const char* text)
 {
-    if (!a_attached) return;
-    if (!text) return;
     a_textdata.assign(text);
 }
 
 // return the MFD text
-string out_saitek_t::get_text(void)
+string out_saitek_t::get_text(int line)
 {
-    return a_textdata;
+   debug_out(info,"line %d - %s",line,a_display[line].c_str());
+    return a_display[line];
 }
 
 // print on the MFD the text that has been set
 void out_saitek_t::print()
 {
-    if (!a_attached) return;
     print(a_textdata.c_str());
 }
 
@@ -263,27 +261,21 @@ void out_saitek_t::print(const char* t, ...)
     // characters and a terminating null byte, any additional characters are discarded
     char text[51] = {};
     if (!t || a_product == x52_other_device) return;
-    //clear();
     if (!strlen(t)) return;
     va_list ap;
     va_start(ap, t);
     snprintf(text, 51, t, ap);
     va_end(ap);
-
     char* token = strtok(text, "\n");
     while (token && (n_lf < 3))
     {
         char line[17] = {};
         strncpy(line, token, 16);
         line[16] = 0;
-        try
-        {
-            print_line(n_lf, line, 16);
-        }
-        catch (const char* reason)
-        {
-            debug_out(err,"out_saitek_t: internal error printing %s: %s",line,reason);
-        }
+        string line_string;
+        line_string.assign(line);
+        a_display[n_lf] = line_string;
+        if (a_attached) print_line(n_lf, line, 16); // print only if the joystick is attached
         n_lf++;
         token = strtok(0, "\n");
     }
