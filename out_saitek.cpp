@@ -212,7 +212,6 @@ void out_saitek_t::set_textdata(const char* text)
 // return the MFD text
 string out_saitek_t::get_text(int line)
 {
-   debug_out(info,"line %d - %s",line,a_display[line].c_str());
     return a_display[line];
 }
 

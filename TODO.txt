@@ -1,13 +1,7 @@
-NEW:
-- multi platform support
-- Works without joystick
-- virtual mfd with hotkey
-- libusb 1.0.18 update
-- speak when changed
-
 BUGS:
 - device busy in linux
 - plugin_version not defined in out_saitek.cpp
+- time not correct
 
 NEW FEATURES:
 - highlight flying entry in gui
@@ -15,3 +9,5 @@ NEW FEATURES:
 - FP with arrival APT repeated
 - fuel eta for each entry
 - voice position report with button
+- Better skin for virtual MFD
+- MFD and FMS status auto update

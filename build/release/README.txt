@@ -6,13 +6,13 @@ Additionally, it comes with an embedded realistic FMS capable of calculating exp
 The FMS continuously monitors your position and leverages X-Plane voice to brief you regarding the flight plan status, position report and delays from scheduled and expected time.
 Even without a supported joystick, both the FMS and a virtual MFD are made available.
  
-######Supported Platforms######
+###### Supported Platforms ######
 X-Plane 9.x and 10.x:
 - Mac OSX (32 bit and 64 bit)
 - Linux (32 bit and 64 bit)
 - Windows (32 bit and 64 bit)
 
-######FMS Features######
+###### FMS Features ######
 Once a valid flight plan is loaded in the FMS and the plugin is configured with scheduled departure time, cruise ground speed and altitude, it will provide the following information:
 	- Expected Enroute Time (considering realistic climb/descend time)
 	- Total Distance
@@ -24,7 +24,7 @@ Additionally, the FMS continuously monitors your position and keeps track of the
 	- For each entry actual time/altitude and delay from scheduled and expected time
 The plugin also leverages X-Plane voice to brief you regarding the flight plan status and position report.
 
-######Installation######
+###### Installation ######
 Mac OSX:
 - uncompress the package
 - Copy the entire "xcontrol" directory into "x-plane_directory/Resources/plugins"
@@ -45,7 +45,7 @@ Windows:
 - Select your joystick (for Saitek, it is the one with vid:06a3) and click on "Install"
 - Open the start menu, run "Test (Win) program" under "Programs\LibUSB-Win32" and ensure you can see the model of your joystick
 	
-######Upgrade######
+###### Upgrade ######
 If upgrading from x52control:
 - uncompress the package
 - Copy the entire "xcontrol" directory into "x-plane_directory/Resources/plugins"
@@ -55,7 +55,7 @@ If NOT upgrading from x52control:
 - uncompress the package
 - Copy and overwrite the directories "32" and "64" from the upgrade package into "x-plane_directory/Resources/plugins/xcontrol" to maintain the existing configuration settings
 
-######Basic Configuration######
+###### Basic Configuration ######
 - Optionally edit the xcontrol.ini file in the plugin directory if you want to customize the MFD pages to display (see below "xcontrol.ini configuration")
 - Optionally edit the xfms.ini file in the plugin directory if you want to customize the FMS settings (see below "xfms.ini configuration")
 - Connect the Joystick and run X-Plane
@@ -68,18 +68,18 @@ If NOT upgrading from x52control:
 - The same information printed on the MFD is also available on the virtual MFD available in the menu "Plugin", "XControl", "Show virtual MFD" (accessible also with the hotkey CTRL+Shift+V)
 - Please note that xcontrol is delivered as a "fat" plugin; this means that the correct plugin for your platform/architecture is automatically loaded by X-Plane. However, old X-Plane 9.x versions do not support this feature; so if the plugin is not loading, manually copy the correct xpl file out from the "32" or "64" directory into the plugin root directory.
 
-######xcontrol.ini configuration######
+###### xcontrol.ini configuration ######
 The xcontrol.ini file can be used to customize buttons, leds and MFD pages. Open the file with a text editor; instructions for each directive are provided within the file. Default values should be fine. 
 If you wish to customize for each button the MFD pages to display and cycle within, add the name of the MFD template to the directives mfdpages_button1, mfdpages_button2, mfdpages_button3, mfdpages_button4 (e.g. mfdpages_button1#flight.fms,flight.combined).
 For a complete list of the available MFD data pages, see below ("Available Data Pages").
 
-######xfms.ini configuration######
+###### xfms.ini configuration ######
 The xms.ini file can be used to customize FMS settings used by the plugin to calculate times and distances. Open the file with a text editor; instructions for each directive are provided within the file.
 Planned cruise Flight Level, Ground Speed and expected takeoff time can be configured from the plugin menu and there is no need to change the file for those. Climbing/descending profiles are used to calculate top of climb/descend. Each profile contains the time and distance for different Flight Levels (e.g. how many minutes/miles to climb to the specific altitude/descending from the specific altitude). 
 Fuel consumption on ground (taxi,takeoff,landing), for climbing/descending, cruise consumption for 100nm, IFR/VFR contingency can all be configure within this file.
 Since some of those values can be aircraft specific, the plugin looks also for a xfms.ini file into the loaded aircraft folder, if found, it takes precedence over the global file. You may need to reload the plugin to have this to work.
 	
-#####Available Data Pages######
+##### Available Data Pages ######
 A list of all the available data pages follows below. For each page the template is also provided to give an idea of what is going to show up in the screen when selected
 
 Flight control related pages:
@@ -135,9 +135,8 @@ Legacy pages:
 	- std.radio.adf
 	- std.navigation
 	
-######Compiling the source code######
+###### Source code ######
 The source code is available on GitHub at the following location: https://github.com/user2684/xcontrol
-The plugin has being built using QT Creator and qmake across the different platform and compiled with msvc 2013 on Windows, XCode on Mac OSX and gcc on Linux.
 
-######Credits######
-This plugin is based on x52control 0.4.0-dt whose source code is available at https://github.com/sothis/x52control/tree/v0.4.0-dt.
+###### Credits ######
+This plugin has been derived from x52control 0.4.0-dt whose source code is available at https://github.com/sothis/x52control/tree/v0.4.0-dt

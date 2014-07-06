@@ -20,6 +20,7 @@ DEFINES += XPLM200
 ######################################
 # Win32 platform specific variables
 #
+# QT Creator Build chain: msvc32, msvc64
 # QT Creator build directory: build\working
 # QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.dll ..\release\32\win.xpl
 # QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.dll ..\release\64\win.xpl
@@ -64,6 +65,7 @@ unix|macx {
 ######################################
 # Linux platform specific variables
 #
+# QT Creator Build chain: gcc
 # QT Creator build directory: build/working
 # QT Creator Custom process step: cp liblin_32.xpl.so ../release/32/lin.xpl
 # QT Creator Custom process step: cp liblin_64.xpl.so ../release/64/lin.xpl
@@ -81,6 +83,7 @@ unix:!macx {
 ######################################
 # Mac OSX platform specific variables
 #
+# QT Creator Build chain: xcode
 # QT Creator build directory: build/working
 # QT Creator Custom process step: cp libmac_32.xpl.dylib ../release/32/mac.xpl
 # QT Creator Custom process step: cp libmac_64.xpl.dylib ../release/64/mac.xpl
