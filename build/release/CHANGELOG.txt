@@ -1,0 +1,72 @@
+#####################################
+######X-Control Enhanced Plugin######
+#####################################
+
+######Release Notes######
+- v1.0.0:
+	- Added support for Windows (32 bit and 64 bit) and Linux (32 bit and 64 bit)
+	- The plugin does not need anymore a joystick attached to make the embedded FMS available
+	- A virtual MFD has been added so to provide all the plugin capabitilies even without a joystick
+	- The project has been renamed from x52control into xcontrol since it is no more dependant on a Saitek X52 joystick
+	- The code has been structured to easily add support for other joysticks (Saitek or not) in future releases
+	- Integrated libusb-win32 for the Windows plugin and upgraded libusb on Mac and Linux to v1.0.18
+	- When a change in the flight plan is identified, the plugin speaks only distance and time, no more the airports
+- v0.6.0:
+	- The FMS has been improved to be more realistic and accurate (e.g. climb/desc time is used when providing ETA)
+	- The FMS provides for each entry: leg time, leg duration, distance from departure, distance from arrival, scheduled time, expected altitude
+	- The FMS continuosly monitors your position and keeps track of time at departure/arrival gate and for each entry actual time/altitude and delay from scheduled and expected time
+	- The FMS Status is accessible via the plugin menu and with hotkey (ctrl+shift+B)
+	- The FMS leverages X-Plane voice to brief you regarding the flight plan status and position report
+	- The FMS tracker now works even if not visible in the joystick
+	- Many many performance improvements
+- v0.5.4:
+	- New MFD page fms.planner has been added providing the following information:
+		- Departure/Arrival airports
+		- Flight duration
+		- Fuel to load to accomplish the trip
+		- Top of descend FIX (how many miles before a specific FIX the descend has to start)
+	- New MFD page fms.scheduler has been added providing the following information:
+		- Expected/actual takeoff time
+		- Expected Top of Climb time
+		- Expected Top of Descend time
+		- Expected/actual landing time
+	- New config file x52planner.ini has been added to configure fms.planner and fms.scheduler correctly.
+	- Added two additional custom buttons. Now up to four buttons can be configured to map MFD pages on the display
+	- Added a plugin menu for a better real-time interaction with the plugin and providing the following functionalities:
+		- Reload all the configuration files
+		- Set planner and scheduler configuration settings (e.g. expected FL, GS, takeoff time)
+	- Many optimizations have been achieved to improve the frame rate impact of the plugin. Specifically:
+		- The configuration class has been made singleton so preventing reading the configuration files multiple times every second
+		- Improved the way configuration files are read
+		- More accurate identification of a flight plan change
+	- Renamed the MFD page flight.fms in fms.status (the old flight.fms is still valid)
+- v0.5.3:
+	- Upgraded libusb from v0.1.4 to v1.0.9 so fixing a few bugs which were causing stability issues when the simulator was restarted
+	- Added upgrade procedure
+	- Dropped compiled support for Linux, source code still available for compiling
+- v0.5.2:
+	- Fixed a few bugs which were causing stability issues when the simulator was restarted
+	- Introduced additional verbose logs helpful for debugging the joystick probing and detaching phases
+	- Reviewed the installation procedure
+- v0.5.1:
+	- Added support for X-Plane 10 (64 bit)
+- v0.5.0:
+	- Added capability to configure two buttons, each cycling through different datapages (e.g. weather and flight control) (x52in.cpp, x52session.cpp)
+	- Added support for retrieving xplmType_Data types (e.g. strings) (x52data.cpp)
+	- The pages to display for each button are now read from the configuration file (option mfdpages__button1# and mfdpages_button2#) (x52session.cpp)
+	- Added multiple new MFD pages (full description in README.mfdpages):
+		- flight.fms: displays FMS information including distance, ETA, fuel remaining. It is suggested to map joystick's buttons to FMS prev and FMS next to make it interactive (x52mfdpages.cpp, x52fms.cpp)
+		- flight.low: displays information useful during climb/descent such as NAV1 ID, dme, wind and trasponder status (x52mfdpages.cpp)
+		- flight. high: displays information useful during cruise such as mach speed, TAS, GS, GPS information (x52mfdpages.cpp)
+		- flight combined: displays a unified view with only relevant information such as gear status, flap status, speed (IAS and mach), NAV1 ID (x52mfdpages.cpp)
+		- weather.wind: displays information regarding the wind at three flight levels (x52mfdpages.cpp)
+		- weather.cloud: displays information regarding the clouds at three flight levels (x52mfdpages.cpp)
+		- weather.condition: displays information regarding the weather such as temperatures, visibility, rain, runaway friction (x52mfdpages.cpp)
+	- The flight plan is automatically saved upon each change to Output/FMS plans/_x52save.fms. Useful if using e.g. GMap to plot it realtime (x52fms.cpp)
+	- Log file now written to Resources/plugins/x52control/x52log.txt (x52tools.cpp)
+	- Verbose logging now on if debug#1 in the configuration file (x52tools.cpp)
+	- Other minor bug fixes:	
+		- Zulu time only is now displayed in the time display (x52time.cpp)
+		- Added safeguard to prevent X-Plane to crash if the Joystick is not found/connected (x52session.cpp, x52out.cpp)
+		- Commented out the call to __bswap_constant_16 preventing the plugin to compile (x52out.cpp)
+		- Altered Makefile to make it compiling on Mac 10.8.4
