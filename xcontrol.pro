@@ -84,14 +84,20 @@ macx {
 ######################################
 # Source Files - Headers
 ######################################
-HEADERS		+= include/*.h
+HEADERS		+= include/*.h \
+    include/gui_mfd.h \
+    include/gui_fms_option.h \
+    include/gui_fms_status.h
 HEADERS		+= include/libusb-1.0/*.h
 HEADERS		+= include/libusb-win32/*.h
 HEADERS		+= include/SDK/*.h
 ######################################
 # Source Files - CPP
 ######################################
-SOURCES		+= main.cpp
+SOURCES		+= main.cpp \
+    gui_mfd.cpp \
+    gui_fms_option.cpp \
+    gui_fms_status.cpp
 SOURCES		+= session.cpp
 SOURCES		+= tools.cpp
 SOURCES		+= data.cpp
