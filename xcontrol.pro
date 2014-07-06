@@ -19,6 +19,10 @@ DEFINES += XPLM200
 
 ######################################
 # Win32 platform specific variables
+#
+# QT Creator build directory: build\working
+# QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.dll ..\release\32\win.xpl
+# QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.dll ..\release\64\win.xpl
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
@@ -66,6 +70,7 @@ unix:!macx {
     64bit:TARGET = lin_64.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
     LIBS += -ludev
+    # Libusb-1.0 source files
     SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
 }
 
@@ -78,26 +83,21 @@ macx {
     64bit:TARGET = mac_64.xpl
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
+    # Libusb-1.0 source files
     SOURCES += libusb-1.0/os/darwin_usb.c
 }
 
 ######################################
 # Source Files - Headers
 ######################################
-HEADERS		+= include/*.h \
-    include/gui_mfd.h \
-    include/gui_fms_option.h \
-    include/gui_fms_status.h
+HEADERS		+= include/*.h
 HEADERS		+= include/libusb-1.0/*.h
 HEADERS		+= include/libusb-win32/*.h
 HEADERS		+= include/SDK/*.h
 ######################################
 # Source Files - CPP
 ######################################
-SOURCES		+= main.cpp \
-    gui_mfd.cpp \
-    gui_fms_option.cpp \
-    gui_fms_status.cpp
+SOURCES		+= main.cpp
 SOURCES		+= session.cpp
 SOURCES		+= tools.cpp
 SOURCES		+= data.cpp
@@ -118,3 +118,6 @@ SOURCES             += fms_fp.cpp
 SOURCES             += fms_utils.cpp
 SOURCES		+= config.cpp
 SOURCES		+= gui.cpp
+SOURCES             += gui_mfd.cpp
+SOURCES             += gui_fms_option.cpp
+SOURCES             += gui_fms_status.cpp

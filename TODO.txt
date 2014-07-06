@@ -1,12 +1,17 @@
-BUGS:
-- version xp10 mfd
-- virtual mfd
+NEW:
+- multi platform support
+- Works without joystick
+- virtual mfd with hotkey
+- libusb 1.0.18 update
 - speak when changed
+
+BUGS:
+- device busy in linux
+- plugin_version not defined in out_saitek.cpp
 
 NEW FEATURES:
 - highlight flying entry in gui
 - joystick hotplug
-- fms without joystick
 - FP with arrival APT repeated
 - fuel eta for each entry
 - voice position report with button

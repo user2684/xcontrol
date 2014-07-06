@@ -60,9 +60,7 @@ void fms_t::refresh(void)
 		load();
 		// voice report
 		char voice_1[2048] = "";
-        snprintf(voice_1, 2048, "%s to %s, %.0f miles,  %s minutes",
-			a_fp_ref->a_fp[0]->a_name.c_str(),
-			a_fp_ref->a_fp[a_fp_ref->a_arrival_index]->a_name.c_str(),
+        snprintf(voice_1, 2048, "%.0f miles,  %s minutes",
 			a_fp_ref->a_total_distance,
 			minutes2time(a_fp_ref->a_total_time).c_str()
 		);
