@@ -66,6 +66,7 @@ If NOT upgrading from x52control:
 - Set scheduled departure time, cruise ground speed and altitude in the menu "Plugin", "XControl", "FMS Settings"
 - While flying, track your progress along the plan by leveraging the MFD or with the summary available in the menu "Plugin", "XControl", "Show FMS Status" (accessible also with the hotkey CTRL+Shift+B)
 - The same information printed on the MFD is also available on the virtual MFD available in the menu "Plugin", "XControl", "Show virtual MFD" (accessible also with the hotkey CTRL+Shift+V)
+- Please note that xcontrol is delivered as a "fat" plugin; this means that the correct plugin for your platform/architecture is automatically loaded by X-Plane. However, old X-Plane 9.x versions do not support this feature; so if the plugin is not loading, manually copy the correct xpl file out from the "32" or "64" directory into the plugin root directory.
 
 ######xcontrol.ini configuration######
 The xcontrol.ini file can be used to customize buttons, leds and MFD pages. Open the file with a text editor; instructions for each directive are provided within the file. Default values should be fine. 
