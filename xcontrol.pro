@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 32bit
+CONFIG += 64bit
 
 ######################################
 # Define global variables
@@ -63,6 +63,10 @@ unix|macx {
 
 ######################################
 # Linux platform specific variables
+#
+# QT Creator build directory: build/working
+# QT Creator Custom process step: cp liblin_32.xpl.so ../release/32/lin.xpl
+# QT Creator Custom process step: cp liblin_64.xpl.so ../release/64/lin.xpl
 ######################################
 unix:!macx {
     DEFINES += APL=0 IBM=0 LIN=1
