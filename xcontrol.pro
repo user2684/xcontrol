@@ -80,6 +80,10 @@ unix:!macx {
 
 ######################################
 # Mac OSX platform specific variables
+#
+# QT Creator build directory: build/working
+# QT Creator Custom process step: cp libmac_32.xpl.dylib ../release/32/mac.xpl
+# QT Creator Custom process step: cp libmac_64.xpl.dylib ../release/64/mac.xpl
 ######################################
 macx {
     DEFINES += APL=1 IBM=0 LIN=0
