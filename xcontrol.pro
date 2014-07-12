@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 64bit
+CONFIG += 32bit
 
 ######################################
 # Define global variables
