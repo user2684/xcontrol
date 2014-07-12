@@ -49,17 +49,7 @@ unix|macx {
         QMAKE_CXXFLAGS += -m64
         QMAKE_LFLAGS += -m64
     }
-    # Libusb-1.0 source files
-    INCLUDEPATH         += include/libusb-1.0
-    INCLUDEPATH         += include/libusb-1.0/os
-    SOURCES             += libusb-1.0/core.c
-    SOURCES             += libusb-1.0/descriptor.c
-    SOURCES             += libusb-1.0/io.c
-    SOURCES             += libusb-1.0/strerror.c
-    SOURCES             += libusb-1.0/sync.c
-    SOURCES             += libusb-1.0/hotplug.c
-    SOURCES             += libusb-1.0/os/threads_posix.c
-    SOURCES             += libusb-1.0/os/poll_posix.c
+
 }
 
 ######################################
@@ -75,9 +65,15 @@ unix:!macx {
     32bit:TARGET = lin_32.xpl
     64bit:TARGET = lin_64.xpl
     QMAKE_CXXFLAGS += -fvisibility=hidden
-    LIBS += -ludev
+    # Libusb0 source files
+    INCLUDEPATH         += include/libusb0
+    SOURCES             += libusb0/usb.c
+    SOURCES             += libusb0/error.c
+    SOURCES             += libusb0/linux.c
+    SOURCES             += libusb0/descriptors.c
     # Libusb-1.0 source files
-    SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
+    # LIBS += -ludev
+    # SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
 }
 
 ######################################
@@ -95,7 +91,17 @@ macx {
     QMAKE_LFLAGS += -flat_namespace -undefined suppress
     CONFIG += x86 ppc
     # Libusb-1.0 source files
-    SOURCES += libusb-1.0/os/darwin_usb.c
+    INCLUDEPATH         += include/libusb-1.0
+    INCLUDEPATH         += include/libusb-1.0/os
+    SOURCES             += libusb-1.0/core.c
+    SOURCES             += libusb-1.0/descriptor.c
+    SOURCES             += libusb-1.0/io.c
+    SOURCES             += libusb-1.0/strerror.c
+    SOURCES             += libusb-1.0/sync.c
+    SOURCES             += libusb-1.0/hotplug.c
+    SOURCES             += libusb-1.0/os/threads_posix.c
+    SOURCES             += libusb-1.0/os/poll_posix.c
+    SOURCES             += libusb-1.0/os/darwin_usb.c
 }
 
 ######################################
@@ -103,6 +109,7 @@ macx {
 ######################################
 HEADERS		+= include/*.h
 HEADERS		+= include/libusb-1.0/*.h
+HEADERS		+= include/libusb0/*.h
 HEADERS		+= include/libusb-win32/*.h
 HEADERS		+= include/SDK/*.h
 ######################################

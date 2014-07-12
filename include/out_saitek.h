@@ -36,9 +36,9 @@ private:
     bool a_attached;
     std::string a_textdata;
     std::map<int, std::string> a_display;
-#if IBM // on Windows, with libusb v0.1
+#if IBM || LIN // libusb v0.1
     struct usb_device* a_joydev;
-#else // on Linux and Mac, with libusb v1.0
+#else // libusb v1.0
     struct libusb_device_handle* a_joydev;
 #endif
     usb_dev_handle* a_usbhdl;
