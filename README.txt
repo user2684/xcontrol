@@ -32,7 +32,8 @@ The plugin supports the following Saitek X52 and Saitek X52 Pro joystick models:
 Supported USB Libraries
 =====================================
 In order to communicate with the joystick, the plugin uses the following libraries:
-- libusb-1.0 in Linux and Mac OSX (http://www.libusb.org/). The library is compiled within the plugin and does not require any further installation. On Linux, udev is required.
+- libusb-1.0 in Max OSX (http://www.libusb.org/). The library is compiled within the plugin and does not require any further installation. 
+- libusb-0.1 in Linux (http://www.libusb.org/). The library is compiled within the plugin and does not require any further installation. udev is required.
 - libusb-win32 filter driver in Windows (http://sourceforge.net/p/libusb-win32/wiki/Home/). libusb-win32 is the only library that provides a filter driver which would still make the joystick's original functions available while allowing the plugin to interact with it
 
 Directory Structure
