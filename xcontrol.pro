@@ -71,9 +71,6 @@ unix:!macx {
     SOURCES             += libusb0/error.c
     SOURCES             += libusb0/linux.c
     SOURCES             += libusb0/descriptors.c
-    # Libusb-1.0 source files
-    # LIBS += -ludev
-    # SOURCES        += libusb-1.0/os/linux_usbfs.c libusb-1.0/os/linux_udev.c
 }
 
 ######################################
