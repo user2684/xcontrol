@@ -56,8 +56,8 @@ gui_t::~gui_t(void) {
 // enagle the UI
 void gui_t::enable(void) {
 	// Create a Custom Menu within the Plugin Menu
-    if (a_menu_created == 0) mySubMenuItem = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "X-Control", 0, 1);
-    myMenu = XPLMCreateMenu("X-Control", XPLMFindPluginsMenu(), mySubMenuItem, menu_handler, 0);
+    if (a_menu_created == 0) mySubMenuItem = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "X-Control Enhanced", 0, 1);
+    myMenu = XPLMCreateMenu("X-Control Enhanced", XPLMFindPluginsMenu(), mySubMenuItem, menu_handler, 0);
     a_fms_status_page = 0;
     XPLMAppendMenuItem(myMenu,"FMS Settings",(void*)1,1);
     XPLMAppendMenuSeparator(myMenu);
