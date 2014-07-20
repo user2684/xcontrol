@@ -24,12 +24,16 @@ void tools_t::debug_out(int type, const char* msg, ...)
 	a_debug = ::atoi(config["debug"].c_str());
 	if ((type == debug) && (a_debug <1)) return;
 	if ((type == verbose) && (a_debug<2)) return;
+    if ((type == all) && (a_debug<3)) return;
 	FILE * log;
     log = fopen ("Resources/plugins/xcontrol/xlog.txt","a");
     va_list ap;
     va_start(ap, msg);
     switch (type)
     {
+    case all:
+        fprintf(log, "all: ");
+        break;
 	case verbose:
         fprintf(log, "verbose: ");
         break;

@@ -7,7 +7,7 @@
 #include "include/session.h"
 #include "include/version.h"
 
-const char* plugin_version = "1.0.0";
+const char* plugin_version = "1.0.1a";
 
 #if IBM
 #include <windows.h>

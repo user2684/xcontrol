@@ -23,7 +23,7 @@
 // define the messages to display when the plugin load/unload
 
 #define OFFLINE_MSG  "   Saitek X52\n     Flight\n Control System"
-#define ONLINE_MSG   "X-Control Plugin\nVersion 1.0.0 \nLoading...   ", plugin_version
+#define ONLINE_MSG   "X-Control Plugin\nVersion 1.0.1a \nLoading...   "
 
 // Define supported joystick IDs
 enum saitek_vendors
@@ -303,7 +303,7 @@ int out_saitek_t::send_usb(int index, int value)
 #endif
     int request = 0x91;
     int timeout = 100;
-    debug_out(verbose,"out_saitek: sending to usb requesttype: 0x%x,request: 0x%x,index: 0x%x,value: 0x%x",requesttype,request,index,value);
+    debug_out(all,"out_saitek: sending to usb requesttype: 0x%x,request: 0x%x,index: 0x%x,value: 0x%x",requesttype,request,index,value);
 #if IBM || LIN // libusb v0.1
     return usb_control_msg(a_usbhdl,requesttype,request,value,index,0,0,timeout);
 #else // libusb v1.0

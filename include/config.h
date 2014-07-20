@@ -25,6 +25,7 @@ private:
     config_t(){}
 	 enum dbgtype_e
     {
+        all,
 		verbose,
 		debug,
         info,

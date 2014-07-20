@@ -103,7 +103,7 @@ void data_t::refresh_datasources(void) // firstly called by xplane
     {
         if ((*it)->refresh()) // refresh each datasource value
         {
-            debug_out(verbose, "data: '%s' type %d reported new data (%s)", (*it)->name().c_str(), (*it)->getType(),(const char*)*(*it));
+            debug_out(all, "data: '%s' type %d reported new data (%s)", (*it)->name().c_str(), (*it)->getType(),(const char*)*(*it));
             refresh_listeners(*it); // refresh all the listeners with this datasource
         }
     }

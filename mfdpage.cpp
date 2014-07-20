@@ -120,11 +120,14 @@ const std::string& mfdpage_t::name(void)
 void mfdpage_t::set_active(bool active)
 {
     a_visible = active;
-    if (active)
+    if (active) {
         for (map<int, object_t*>::iterator it = a_datasources.begin(); it != a_datasources.end(); ++it)
         {
             (*it).second->mark_dirty();
         }
+     } else { // reset the timestamp for last update so to refresh when cycled back to the page
+        last_page_update = 0;
+    }
 }
 
 void mfdpage_t::set_datasources(std::map<int, std::string>* sources)
@@ -161,7 +164,7 @@ bool mfdpage_t::has_object(object_t* source)
 
 bool mfdpage_t::refresh(object_t* source)
 {
-	debug_out(verbose,"mfdpage: page %s received the updated '%s': %s",a_name.c_str(),source->name().c_str(),(const char*)(*source));
+    debug_out(all,"mfdpage: page %s (%d) received the updated '%s': %s",a_name.c_str(),a_visible,source->name().c_str(),(const char*)(*source));
 	a_page->do_refresh(source);
 	if (a_type == "time" || a_type == "led") return true; // time is always visible
     if (!a_visible) return false;
@@ -171,12 +174,13 @@ bool mfdpage_t::refresh(object_t* source)
 void mfdpage_t::final_refresh(void)
 {
 	time_t now = time(NULL);
+    debug_out(all, "mfdpage: requested joystick refresh for %s", a_name.c_str());
 	if (now < (last_page_update + a_page->refresh_interval(a_name)) ) return; // not the time to update
     last_page_update=now;
     debug_out(debug, "mfdpage: refreshing joystick display (%s)", a_name.c_str());
     a_data = a_page->refresh_template(a_name,a_datasources,a_template);
 	if (a_type == "time") {
-			debug_out(verbose, "mfdpage: updating time %c:%c - %d/%d/%d", a_page->a_time["hour"],a_page->a_time["minute"],a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
+            debug_out(verbose, "mfdpage: updating time %02d:%02d - %d/%d/%d", a_page->a_time["hour"],a_page->a_time["minute"],a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
             a_outdevice->a_joystick->set_time(true, a_page->a_time["hour"],a_page->a_time["minute"]);
             a_outdevice->a_joystick->set_date(a_page->a_date["year"], a_page->a_date["month"], a_page->a_date["day"]);
 	} else { // print something on the MFD

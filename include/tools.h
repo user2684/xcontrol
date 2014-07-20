@@ -15,7 +15,8 @@ public:
     static void debug_out(const char* msg, ...);
     enum dbgtype_e
     {
-		verbose,
+        all,
+        verbose,
 		debug,
         info,
         warn,

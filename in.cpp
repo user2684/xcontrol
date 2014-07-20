@@ -52,26 +52,35 @@ void in_t::add_page(mfdpage_t* page)
 void in_t::handle_pagecycle(int button)
 {	
     set<mfdpage_t*>::iterator it = a_pages.find(a_currentpage);
-	debug_out(verbose,"in: Handling page change from button %i",button);
-    if (it == a_pages.end()) return; // not found
+    debug_out(verbose,"in: handling page change from button %i",button);
+    if (it == a_pages.end()) {
+          debug_out(debug,"in: cannot find current page");
+          return; // not found
+     }
+     debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name().c_str());
      a_currentpage->set_active(false); // found, set inactive
 	 
 	 std::set<mfdpage_t*> a_pages_button; // temp set with only the pages belonging to the current button
-	 for (set<mfdpage_t*>::iterator it = a_pages.begin(); it != a_pages.end(); ++it)
+     for (set<mfdpage_t*>::iterator it = a_pages.begin(); it != a_pages.end(); ++it) // cycle through all the pages
     {
         if ((*it)->a_button == button) a_pages_button.insert(*it);
     }
 		
-	set<mfdpage_t*>::iterator b_it = a_pages_button.find(a_currentpage);		
-	if (b_it == a_pages.end()) 	b_it = a_pages_button.begin(); // currentpage is belonging to a different button, show the first item
+    set<mfdpage_t*>::iterator b_it = a_pages_button.find(a_currentpage); // find the current page in the current button set
+    if (b_it == a_pages.end()) {
+        debug_out(debug,"in: the data page requested belongs to a different button");
+        b_it = a_pages_button.begin(); // currentpage is belonging to a different button, show the first item
+    }
     else ++b_it;
-    if (b_it == a_pages_button.end())
+    if (b_it == a_pages_button.end()) {
+        debug_out(debug,"in: no more data pages to show for the current button, reverting to the first one");
         b_it = a_pages_button.begin();
+    }
     
     a_currentpage = *b_it;
     a_currentpage->set_active(true);
 
-    debug_out(debug, "in: switched datapage to: {%s}, button %d", a_currentpage->name().c_str(),button);
+    debug_out(debug, "in: switching datapage to: {%s}, button %d", a_currentpage->name().c_str(),button);
 }
 
 int in_t::dispatch_command(XPLMCommandRef cmd, XPLMCommandPhase phase, void *arg)
