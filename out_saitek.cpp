@@ -54,6 +54,12 @@ void out_saitek_t::init(void)
     bool found = search();
     if (found) { // if a joystick was found, attach to it
        a_attached = attach();
+       if (a_attached) {
+           debug_out(debug, "out_saitek: setting initial brightness and welcome message");
+           set_display_brightness(0x7F);
+           set_led_brightness(0x7F);
+           print(ONLINE_MSG);
+       }
     }
 }
 
@@ -137,11 +143,6 @@ bool out_saitek_t::attach(void)
     }
 #else // libusb v1.0
 #endif
-
-    debug_out(debug, "out_saitek: setting initial brightness and welcome message");
-    set_display_brightness(0x7F);
-    set_led_brightness(0x7F);
-    print(ONLINE_MSG);
     return true;
 }
 

@@ -150,23 +150,23 @@ void config_t::debug_out(int type, const char* msg, ...)
     switch (type)
     {
     case all:
-        fprintf(log, "all: ");
+        fprintf(log, " [all] ");
         break;
 	 case verbose:
-        fprintf(log, "verbose: ");
+        fprintf(log, " [verbose] ");
         break;
 	 case debug:
-        fprintf(log, "debug: ");
+        fprintf(log, " [debug] ");
         break;
     case info:
-        fprintf(log, "info: ");
+        fprintf(log, " [info] ");
         break;
     case warn:
-        fprintf(log, "warn: ");
+        fprintf(log, " [warn] ");
         break;
     case err:
     default:
-        fprintf(log, "err: ");
+        fprintf(log, "[ err] ");
         break;
     }
     vfprintf(log, msg, ap);
