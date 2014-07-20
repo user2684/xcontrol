@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <time.h>
 
 #include "include/SDK/XPLMPlanes.h"
 #include "include/tools.h"
@@ -139,6 +140,13 @@ void config_t::debug_out(int type, const char* msg, ...)
     log = fopen ("Resources/plugins/xcontrol/xlog.txt","a");
     va_list ap;
     va_start(ap, msg);
+
+    time_t rawtime = time(&rawtime);
+    struct tm * timeinfo = localtime(&rawtime);
+    char time[80];
+    strftime(time,80,"%Y-%m-%d %H:%I:%S",timeinfo);
+    fprintf(log,"[%s]",time);
+
     switch (type)
     {
     case all:
