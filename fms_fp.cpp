@@ -277,8 +277,8 @@ void fms_fp_t::load_time(fms_fp_item_t* prev_item, fms_fp_item_t* item) {
 void fms_fp_t::save(void)
 {
 	FILE * fp;
-	fp = fopen ("Output/FMS plans/_save.fms","w");
-	debug_out(debug, "fms_fp: saving flight plan to Output/FMS plans/_save.fms");
+    fp = fopen ("Output/FMS plans/_xcontrol.fms","w");
+    debug_out(debug, "fms_fp: saving flight plan to Output/FMS plans/_xcontrol.fms");
 	if (fp==NULL) {
 		debug_out(err, "fms_fp: unable to open file for saving");
 		return;

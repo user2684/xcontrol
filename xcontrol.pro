@@ -32,6 +32,10 @@ win32 {
     LIBS += -L../lib
     32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
+QMAKE_CFLAGS_RELEASE += -Zi
+QMAKE_CXXFLAGS_RELEASE += -Zi
+QMAKE_LFLAGS_RELEASE += /DEBUG /OPT:REF /OPT:ICF
+
 }
 
 ######################################
