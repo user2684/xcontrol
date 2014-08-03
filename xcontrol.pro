@@ -23,7 +23,9 @@ DEFINES += XPLM200
 # QT Creator Build chain: msvc32, msvc64
 # QT Creator build directory: build\working
 # QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.dll ..\release\32\win.xpl
+# QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.map ..\map
 # QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.dll ..\release\64\win.xpl
+# QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.map ..\map
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
@@ -32,10 +34,9 @@ win32 {
     LIBS += -L../lib
     32bit:LIBS += -lXPLM -lXPWidgets -llibusb0
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
-QMAKE_CFLAGS_RELEASE += -Zi
-QMAKE_CXXFLAGS_RELEASE += -Zi
-QMAKE_LFLAGS_RELEASE += /DEBUG /OPT:REF /OPT:ICF
-
+    QMAKE_CFLAGS_RELEASE += -Od
+    QMAKE_CXXFLAGS_RELEASE += -Od
+    QMAKE_LFLAGS_RELEASE += /MAP
 }
 
 ######################################

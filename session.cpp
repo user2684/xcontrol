@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iterator>
+#include <stdio.h>
 
 #include "include/out.h"
 #include "include/in.h"

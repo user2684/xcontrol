@@ -57,8 +57,8 @@ void in_t::handle_pagecycle(int button)
           debug_out(debug,"in: cannot find current page");
           return; // not found
      }
-     debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name().c_str());
-    //debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name());
+     //debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name().c_str());
+    debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name());
      a_currentpage->set_active(false); // found, set inactive
 	 
 	 std::set<mfdpage_t*> a_pages_button; // temp set with only the pages belonging to the current button
