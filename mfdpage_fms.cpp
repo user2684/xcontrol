@@ -81,9 +81,11 @@ string mfdpage_fms_t::refresh_template(string name,std::map<int, object_t*> a_da
 		memset(temp, 0, 2048);
 		if (a_fms_ref->a_fp_ref->a_status > 0) {
 			int flying_index = a_fms_ref->flying_index();
-			int displayed_index = a_fms_ref->displayed_index(); // get the displayed entry ID
-            debug_out(verbose,"XXX: fly: %d, disp: %d",flying_index,displayed_index);
-			if (displayed_index >= flying_index) { // displaying an upcoming entry
+            int displayed_index = a_fms_ref->displayed_index(); // get the displayed entry ID
+            if (displayed_index < 0) { // catch anomalies when displayed entry is negative
+                debug_out(warn, "mfdpage_fms: invalid displayed entry index (%d)",displayed_index);
+                snprintf(temp, 2048, "     STATUS     \nFMS ERROR\nStatus:INV_DISP");
+            } else if (displayed_index >= flying_index) { // displaying an upcoming entry
 				// <arrival_apt> <remaining_distance> <fuel_eta>
 				// <hh_eta>:<mm_eta> <id_name>
 				// <distance>/<remaining>m <hh_time>:<mm_time>
