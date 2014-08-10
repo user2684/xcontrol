@@ -58,8 +58,8 @@ void in_t::handle_pagecycle(int button)
           return; // not found
      }
      debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name().c_str());
-     // This can be used to make the windows plugin crashing on purpose
-     //debug_out(debug,"in: setting current page {%s} as inactive",a_currentpage->name());
+     // This can be used to make the plugin crashing on purpose
+     //     *((unsigned int*)0) = 0xDEAD;
      a_currentpage->set_active(false); // found, set inactive
 	 
 	 std::set<mfdpage_t*> a_pages_button; // temp set with only the pages belonging to the current button

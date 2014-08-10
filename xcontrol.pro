@@ -9,7 +9,7 @@ CONFIG -= thread exceptions qt rtti
 ######################################
 # Define the target Architecture
 ######################################
-CONFIG += 64bit
+CONFIG += 32bit
 
 ######################################
 # Define global variables
@@ -23,9 +23,11 @@ DEFINES += XPLM200
 # QT Creator Build chain: msvc32, msvc64
 # QT Creator build directory: build\working
 # QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.dll ..\release\32\win.xpl
-# QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.map ..\map
+# QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.map ..\debug
+# QT Creator Custom process step (msvc32): cmd.exe /c copy /y release\win_32.xpl.pdb ..\debug
 # QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.dll ..\release\64\win.xpl
-# QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.map ..\map
+# QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.map ..\debug
+# QT Creator Custom process step (msvc64): cmd.exe /c copy /y release\win_64.xpl.pdb ..\debug
 ######################################
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0 _CRT_SECURE_NO_WARNINGS
@@ -36,7 +38,7 @@ win32 {
     64bit:LIBS += -lXPLM_64 -lXPWidgets_64 -llibusb0_64
     QMAKE_CFLAGS_RELEASE += -Od
     QMAKE_CXXFLAGS_RELEASE += -Od
-    QMAKE_LFLAGS_RELEASE += /MAP
+    QMAKE_LFLAGS_RELEASE += /MAP /DEBUG
 }
 
 ######################################

@@ -56,7 +56,7 @@ void tools_t::debug_out(int type, const char* msg, ...)
         break;
     case err:
     default:
-        fprintf(log, "[ err] ");
+        fprintf(log, " [err] ");
         break;
     }
     vfprintf(log, msg, ap);
