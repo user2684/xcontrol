@@ -3,6 +3,11 @@
 ####################################
 
 ######Release Notes######
+- v1.0.1:
+	- Fixed joystick's leds do not light up at startup #24
+	- Fixed flight plan saved to a wrong filename #29
+	- Fixed x-plane crashing after loading a FP #30
+	- Increased logging and debug information
 - v1.0.0:
 	- Added support for Windows (32 bit and 64 bit) and Linux (32 bit and 64 bit)
 	- The plugin does not need anymore a joystick attached to make the embedded FMS available
