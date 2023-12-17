@@ -56,7 +56,7 @@ public:
 	int a_index;
 	float a_lat;
 	float a_lon;
-	long int a_altitude;
+	int a_altitude;
 	XPLMNavType a_type;
 	string a_type_string;
 	float a_distance_from_prev;

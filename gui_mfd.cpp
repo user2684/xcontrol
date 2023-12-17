@@ -53,7 +53,7 @@ void gui_mfd_t::create(int x, int y, int w, int h){
     XPDestroyWidget(mfd_widget, 1);
     mfd_widget = XPCreateWidget(x, y, x2, y2,1,"Virtual MFD",1,NULL,xpWidgetClass_MainWindow);
     XPSetWidgetProperty(mfd_widget, xpProperty_MainWindowHasCloseBoxes, 1);
-    mfd_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,mfd_widget,xpWidgetClass_SubWindow);
+    mfd_window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1, "",0,mfd_widget,xpWidgetClass_SubWindow);
     XPSetWidgetProperty(mfd_window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
     // set the text
     XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,a_out_ref->a_joystick->get_text(0).c_str(),0,mfd_widget,xpWidgetClass_Caption);
@@ -69,7 +69,7 @@ void gui_mfd_t::create(int x, int y, int w, int h){
 }
 
 // handle events from the MFD panel
-int gui_mfd_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,long inParam1,long inParam2) {
+int gui_mfd_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,intptr_t inParam1,intptr_t inParam2) {
     if (inMessage == xpMessage_CloseButtonPushed){
             if(XPIsWidgetVisible(mfd_widget)) XPHideWidget(mfd_widget);
             return 1;
