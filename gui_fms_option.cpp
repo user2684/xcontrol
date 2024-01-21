@@ -62,7 +62,7 @@ void gui_fms_option_t::create(int x, int y, int w, int h){
     // build the option window
     widget = XPCreateWidget(x, y, x2, y2,1,"FMS Options",1,NULL,xpWidgetClass_MainWindow);
     XPSetWidgetProperty(widget, xpProperty_MainWindowHasCloseBoxes, 1);
-    window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1,	"",0,widget,xpWidgetClass_SubWindow);
+    window = XPCreateWidget(x+30, y-30, x2-30, y2+30,1, "",0,widget,xpWidgetClass_SubWindow);
     XPSetWidgetProperty(window, xpProperty_SubWindowType, xpSubWindowStyle_SubWindow);
     // build the labels and the text box widgets
     XPCreateWidget(x+60, y-(70 + (Item*30)), x+115, y-(92 + (Item*30)),1,"Requested Flight Level (FL)",0,widget,xpWidgetClass_Caption);
@@ -86,7 +86,7 @@ void gui_fms_option_t::create(int x, int y, int w, int h){
 
 
 // handle events from the FMS options panel
-int gui_fms_option_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,long inParam1,long inParam2) {
+int gui_fms_option_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,intptr_t inParam1,intptr_t inParam2) {
     if (inMessage == xpMessage_CloseButtonPushed){
             if(XPIsWidgetVisible(widget)) XPHideWidget(widget);
             return 1;

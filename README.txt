@@ -21,6 +21,12 @@ In order to compile the code, accomplish the following steps:
 - Build the project
 - When building for different architectures using the same build chain, remember to clean all before rebuilding.
 
+in alternative:
+
+```sh
+qmake && make
+```
+
 Supported joysticks
 =====================================
 The plugin supports the following Saitek X52 and Saitek X52 Pro joystick models:

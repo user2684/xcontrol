@@ -281,7 +281,7 @@ void gui_fms_status_t::create(void){
 }
 
 // handle events from the FMS status panel
-int gui_fms_status_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,long inParam1,long inParam2) {
+int gui_fms_status_t::click(XPWidgetMessage inMessage,XPWidgetID inWidget,intptr_t inParam1,intptr_t inParam2) {
     if (inMessage == xpMessage_CloseButtonPushed){
             if(XPIsWidgetVisible(widget)) XPHideWidget(widget);
             return 1;

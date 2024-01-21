@@ -16,7 +16,7 @@ public:
     static void disable(void);
 private:
     static void create(int x, int y, int w, int h);
-    static int	click(XPWidgetMessage inMessage,XPWidgetID inWidget,long inParam1,long inParam2);
+    static int  click(XPWidgetMessage inMessage,XPWidgetID inWidget,intptr_t inParam1,intptr_t inParam2);
 };
 
 
